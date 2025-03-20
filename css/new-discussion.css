@@ -1,0 +1,66 @@
+/* New Discussion Styles */
+.new-discussion-content {
+    background: var(--white);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.discussion-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Tags Input */
+.tags-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.75rem;
+    background: var(--light-bg);
+    border-radius: 12px;
+    font-size: 0.875rem;
+}
+
+.tag button {
+    border: none;
+    background: none;
+    color: var(--gray);
+    cursor: pointer;
+    padding: 0;
+    font-size: 1rem;
+}
+
+/* Rich Text Editor */
+#editor {
+    height: 300px;
+    margin-bottom: 1rem;
+}
+
+.ql-editor {
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
