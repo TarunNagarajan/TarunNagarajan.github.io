@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Research Resources - Research Collaboration Platform">
+    <title>Resources | Research Collaboration Platform</title>
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/resources.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <nav class="main-nav">
+            <div class="nav-container">
+                <!-- Logo/Brand -->
+                <div class="nav-brand">
+                    <a href="index.html">
+                        <i class="fas fa-flask"></i>
+                        <span>Research Platform</span>
+                    </a>
+                </div>
+        
+                <!-- Main Navigation -->
+                <ul class="nav-links">
+                    <li><a href="projects.html"><i class="fas fa-project-diagram"></i> Projects</a></li>
+                    <li><a href="publications.html"><i class="fas fa-book"></i> Publications</a></li>
+                    <li><a href="collaboration.html"><i class="fas fa-users"></i> Collaboration</a></li>
+                    <li><a href="resources.html"><i class="fas fa-cube"></i> Resources</a></li>
+                </ul>
+        
+                <!-- User Navigation -->
+                <div class="nav-user">
+                    <!-- Search -->
+                    <div class="nav-search">
+                        <input type="text" placeholder="Search...">
+                        <i class="fas fa-search"></i>
+                    </div>
+        
+                    <!-- User Info -->
+                    <div class="user-info">
+                        <span class="user-time" id="navDateTime">2025-03-20 08:15:45</span>
+                        <div class="user-dropdown">
+                            <button class="user-button">
+                                <img src="assets/images/avatar.jpg" alt="TarunNagarajan" class="user-avatar">
+                                <span class="user-name">TarunNagarajan</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="dropdown-menu">
+                                <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                                <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                                <a href="help.html"><i class="fas fa-question-circle"></i> Help</a>
+                                <div class="dropdown-divider"></div>
+                                <a href="#" class="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- Mobile Menu Button -->
+                <button class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </nav>
+    </nav>
+
+    <div class="resources-container">
+        <!-- Page Header -->
+        <div class="resources-header">
+            <div class="header-content">
+                <h1>Research Resources</h1>
+                <p class="current-time">Current Time (UTC): <span id="currentTime">2025-03-20 12:55:35</span></p>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-secondary" id="filterBtn">
+                    <i class="fas fa-filter"></i> Filter
+                </button>
+                <button class="btn btn-primary" id="addResourceBtn">
+                    <i class="fas fa-plus"></i> Add Resource
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="resources-content">
+            <!-- Left Sidebar - Categories -->
+            <aside class="resources-sidebar">
+                <div class="sidebar-section">
+                    <h2>Categories</h2>
+                    
+                    <!-- Search -->
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="resourceSearch" 
+                               placeholder="Search resources...">
+                    </div>
+
+                    <!-- Resource Types -->
+                    <div class="category-group">
+                        <h3>Type</h3>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="paper" checked>
+                                Research Papers
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="dataset" checked>
+                                Datasets
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="tool" checked>
+                                Tools & Software
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="tutorial" checked>
+                                Tutorials
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Fields -->
+                    <div class="category-group">
+                        <h3>Field</h3>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="cs" checked>
+                                Computer Science
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="physics" checked>
+                                Physics
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="biology" checked>
+                                Biology
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="chemistry" checked>
+                                Chemistry
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Access Level -->
+                    <div class="category-group">
+                        <h3>Access</h3>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="public" checked>
+                                Public
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="private" checked>
+                                Private
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="institution" checked>
+                                Institution
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Content Area -->
+            <main class="resources-main">
+                <!-- Featured Resources -->
+                <section class="resources-section">
+                    <h2>Featured Resources</h2>
+                    <div class="resources-grid" id="featuredResources">
+                        <!-- Featured resources will be added here -->
+                    </div>
+                </section>
+
+                <!-- Recent Resources -->
+                <section class="resources-section">
+                    <h2>Recent Resources</h2>
+                    <div class="resources-grid" id="recentResources">
+                        <!-- Recent resources will be added here -->
+                    </div>
+                </section>
+
+                <!-- Popular Resources -->
+                <section class="resources-section">
+                    <h2>Popular Resources</h2>
+                    <div class="resources-grid" id="popularResources">
+                        <!-- Popular resources will be added here -->
+                    </div>
+                </section>
+            </main>
+
+            <!-- Right Sidebar - Stats & Recommendations -->
+            <aside class="resources-sidebar-right">
+                <!-- Your Library -->
+                <section class="sidebar-section">
+                    <h2>Your Library</h2>
+                    <div class="library-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">15</div>
+                            <div class="stat-label">Saved Resources</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">8</div>
+                            <div class="stat-label">Contributions</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Recommended Resources -->
+                <section class="sidebar-section">
+                    <h2>Recommended</h2>
+                    <div class="recommended-resources" id="recommendedResources">
+                        <!-- Recommended resources will be added here -->
+                    </div>
+                </section>
+
+                <!-- Recent Activity -->
+                <section class="sidebar-section">
+                    <h2>Recent Activity</h2>
+                    <div class="activity-feed" id="activityFeed">
+                        <!-- Activity items will be added here -->
+                    </div>
+                </section>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Add Resource Modal -->
+    <div class="modal" id="addResourceModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Resource</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addResourceForm">
+                    <div class="form-group">
+                        <label for="resourceTitle" class="form-label required">Title</label>
+                        <input type="text" id="resourceTitle" name="title" class="form-input" 
+                               placeholder="Enter resource title" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="resourceType" class="form-label required">Type</label>
+                        <select id="resourceType" name="type" class="form-select" required>
+                            <option value="">Select type</option>
+                            <option value="paper">Research Paper</option>
+                            <option value="dataset">Dataset</option>
+                            <option value="tool">Tool/Software</option>
+                            <option value="tutorial">Tutorial</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="resourceDescription" class="form-label required">Description</label>
+                        <textarea id="resourceDescription" name="description" class="form-textarea" 
+                                placeholder="Enter resource description" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="resourceURL" class="form-label required">URL/Link</label>
+                        <input type="url" id="resourceURL" name="url" class="form-input" 
+                               placeholder="Enter resource URL" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="resourceTags" class="form-label">Tags</label>
+                        <input type="text" id="resourceTags" name="tags" class="form-input" 
+                               placeholder="Enter tags (comma-separated)">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="resourceAccess" class="form-label required">Access Level</label>
+                        <select id="resourceAccess" name="access" class="form-select" required>
+                            <option value="public">Public</option>
+                            <option value="private">Private</option>
+                            <option value="institution">Institution Only</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-action="cancel">Cancel</button>
+                <button class="btn btn-primary" form="addResourceForm" type="submit">Add Resource</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <!-- Footer content -->
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/main.js"></script>
+    <script src="js/resources.js"></script>
+    <script>
+    // Authentication check
+    (function checkAuth() {
+        const session = localStorage.getItem('authSession');
+        if (!session) {
+            window.location.href = 'signin.html';
+            return;
+        }
+
+        const parsedSession = JSON.parse(session);
+        const lastActivity = new Date(parsedSession.lastActivityTime);
+        const now = new Date();
+        const diffMinutes = (now - lastActivity) / (1000 * 60);
+
+        if (diffMinutes > 30) {
+            localStorage.removeItem('authSession');
+            window.location.href = 'signin.html';
+        }
+    })();
+    </script>
+</body>
+</html>

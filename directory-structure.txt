@@ -1,0 +1,11 @@
+research-collaboration-website/
+├── index.html
+├── css/
+│   ├── styles.css
+│   ├── header.css
+│   └── home.css
+├── js/
+│   ├── main.js
+│   └── home.js
+└── assets/
+    └── images/

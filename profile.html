@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="User Profile - Research Collaboration Platform">
+    <title>TarunNagarajan | Research Collaboration Platform</title>
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/profile.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header/Navigation -->
+    <header class="main-header">
+        <!-- Header content -->
+    </header>
+
+    <div class="profile-container">
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="profile-cover">
+                <div class="edit-cover">
+                    <button class="btn btn-icon" id="editCoverBtn" title="Change cover image">
+                        <i class="fas fa-camera"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="profile-info">
+                <div class="profile-avatar">
+                    <img src="assets/images/avatar1.jpg" alt="TarunNagarajan" id="profileAvatar">
+                    <button class="edit-avatar" id="editAvatarBtn" title="Change profile picture">
+                        <i class="fas fa-camera"></i>
+                    </button>
+                </div>
+                
+                <div class="profile-details">
+                    <div class="profile-name">
+                        <h1>TarunNagarajan</h1>
+                        <div class="profile-badges">
+                            <span class="badge verified" title="Verified Researcher">
+                                <i class="fas fa-check-circle"></i>
+                            </span>
+                            <span class="badge institution" title="Academic Institution">
+                                <i class="fas fa-university"></i>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-title">
+                        Research Associate at Stanford University
+                        <button class="btn btn-icon edit-btn" id="editTitleBtn">
+                            <i class="fas fa-pencil-alt"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="profile-meta">
+                        <span><i class="fas fa-map-marker-alt"></i> Stanford, CA</span>
+                        <span><i class="fas fa-clock"></i> Member since March 2025</span>
+                        <span><i class="fas fa-calendar-check"></i> Last active: Just now</span>
+                    </div>
+                    
+                    <div class="profile-actions">
+                        <button class="btn btn-primary" id="editProfileBtn">
+                            <i class="fas fa-edit"></i> Edit Profile
+                        </button>
+                        <button class="btn btn-secondary" id="shareProfileBtn">
+                            <i class="fas fa-share-alt"></i> Share Profile
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="profile-content">
+            <!-- Left Sidebar -->
+            <aside class="profile-sidebar">
+                <!-- About Section -->
+                <section class="profile-section about-section">
+                    <h2>About</h2>
+                    <div class="section-content" id="aboutContent">
+                        <p>Research Associate focusing on Quantum Computing and Machine Learning. Currently working on quantum algorithms for optimization problems.</p>
+                        <div class="contact-info">
+                            <div class="contact-item">
+                                <i class="fas fa-envelope"></i>
+                                <a href="mailto:tarun.nagarajan@stanford.edu">tarun.nagarajan@stanford.edu</a>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-globe"></i>
+                                <a href="https://tarunnagarajan.com" target="_blank">tarunnagarajan.com</a>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-icon edit-btn" id="editAboutBtn">
+                        <i class="fas fa-pencil-alt"></i>
+                    </button>
+                </section>
+
+                <!-- Research Interests -->
+                <section class="profile-section interests-section">
+                    <h2>Research Interests</h2>
+                    <div class="section-content" id="interestsContent">
+                        <ul class="interests-list">
+                            <li>Quantum Computing</li>
+                            <li>Machine Learning</li>
+                            <li>Artificial Intelligence</li>
+                            <li>Algorithm Design</li>
+                            <li>Computational Physics</li>
+                        </ul>
+                    </div>
+                    <button class="btn btn-icon edit-btn" id="editInterestsBtn">
+                        <i class="fas fa-pencil-alt"></i>
+                    </button>
+                </section>
+
+                <!-- Education -->
+                <section class="profile-section education-section">
+                    <h2>Education</h2>
+                    <div class="section-content" id="educationContent">
+                        <div class="education-item">
+                            <h3>Stanford University</h3>
+                            <p>Ph.D. in Computer Science</p>
+                            <span class="date">2022 - Present</span>
+                        </div>
+                        <div class="education-item">
+                            <h3>MIT</h3>
+                            <p>M.S. in Computer Science</p>
+                            <span class="date">2020 - 2022</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-icon edit-btn" id="editEducationBtn">
+                        <i class="fas fa-pencil-alt"></i>
+                    </button>
+                </section>
+            </aside>
+
+            <!-- Main Activity Feed -->
+            <main class="profile-main">
+                <!-- Activity Filters -->
+                <div class="activity-filters">
+                    <button class="filter-btn active" data-filter="all">All Activity</button>
+                    <button class="filter-btn" data-filter="projects">Projects</button>
+                    <button class="filter-btn" data-filter="discussions">Discussions</button>
+                    <button class="filter-btn" data-filter="publications">Publications</button>
+                </div>
+
+                <!-- Activity Timeline -->
+                <div class="activity-timeline" id="activityTimeline">
+                    <!-- Activities will be loaded dynamically -->
+                </div>
+            </main>
+
+            <!-- Right Sidebar -->
+            <aside class="profile-sidebar-right">
+                <!-- Statistics -->
+                <section class="profile-section stats-section">
+                    <h2>Statistics</h2>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value">42</div>
+                            <div class="stat-label">Projects</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">156</div>
+                            <div class="stat-label">Discussions</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">23</div>
+                            <div class="stat-label">Publications</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">1.2k</div>
+                            <div class="stat-label">Citations</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Collaborators -->
+                <section class="profile-section collaborators-section">
+                    <h2>Top Collaborators</h2>
+                    <div class="collaborators-grid" id="collaboratorsList">
+                        <!-- Collaborators will be loaded dynamically -->
+                    </div>
+                </section>
+
+                <!-- Skills & Expertise -->
+                <section class="profile-section skills-section">
+                    <h2>Skills & Expertise</h2>
+                    <div class="skills-content" id="skillsContent">
+                        <div class="skill-item">
+                            <span class="skill-name">Quantum Computing</span>
+                            <div class="skill-level expert">Expert</div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Machine Learning</span>
+                            <div class="skill-level advanced">Advanced</div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Python</span>
+                            <div class="skill-level expert">Expert</div>
+                        </div>
+                        <!-- More skills will be loaded dynamically -->
+                    </div>
+                    <button class="btn btn-icon edit-btn" id="editSkillsBtn">
+                        <i class="fas fa-pencil-alt"></i>
+                    </button>
+                </section>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal" id="editProfileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Profile</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="editProfileForm" class="modal-form">
+                <!-- Form fields will be dynamically populated based on section being edited -->
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+     <script>
+        // Authentication Check Script - Add at the beginning of each page's <script> section
+(function checkAuth() {
+    const session = localStorage.getItem('authSession');
+    if (!session) {
+        window.location.href = 'signin.html';
+        return;
+    }
+
+    const parsedSession = JSON.parse(session);
+    const lastActivity = new Date(parsedSession.lastActivityTime);
+    const now = new Date();
+    const diffMinutes = (now - lastActivity) / (1000 * 60);
+
+    if (diffMinutes > 30) {
+        localStorage.removeItem('authSession');
+        window.location.href = 'signin.html';
+    }
+})();
+     </script>
+    <script src="js/main.js"></script>
+    <script src="js/profile.js"></script>
+    <script src="js/smooth-transitions.js"></script>
+</body>
+</html>

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Research Publications - Research Collaboration Platform">
+    <title>Publications | Research Collaboration Platform</title>
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/publications.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header/Navigation -->
+    <header class="main-header">
+        <!-- Header content -->
+    </header>
+
+    <div class="publications-container">
+        <!-- Publications Header -->
+         <!-- Add this inside your publications-container -->
+<div class="publications-header">
+    <div class="header-content">
+        <h1>Research Publications</h1>
+        <div class="header-meta">
+            <span class="current-time">UTC: <span id="currentDateTime">2025-03-20 14:37:13</span></span>
+            <span class="publications-count">Loading publications...</span>
+        </div>
+    </div>
+    <div class="header-actions">
+        <button class="btn btn-primary" onclick="location.href='new-publication.html'">
+            <i class="fas fa-plus"></i>
+            Add Publication
+        </button>
+    </div>
+</div>
+
+<div class="publications-content">
+    <!-- Left Sidebar -->
+    <aside class="publications-sidebar">
+        <!-- Search -->
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="publicationSearch" placeholder="Search publications...">
+        </div>
+
+        <!-- Filters -->
+        <div class="filter-section">
+            <h2>Filters</h2>
+            
+            <div class="filter-group">
+                <label for="categoryFilter">Category</label>
+                <select id="categoryFilter" class="form-select">
+                    <!-- Categories will be populated dynamically -->
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="typeFilter">Type</label>
+                <select id="typeFilter" class="form-select">
+                    <!-- Types will be populated dynamically -->
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="yearFilter">Year</label>
+                <select id="yearFilter" class="form-select">
+                    <!-- Years will be populated dynamically -->
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <h3>Tags</h3>
+                <div id="tagsFilter" class="checkbox-group">
+                    <!-- Tags will be populated dynamically -->
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="publications-main">
+        <div class="publications-toolbar">
+            <select id="sortSelect" class="form-select">
+                <option value="date">Sort by Date</option>
+                <option value="citations">Sort by Citations</option>
+                <option value="impact">Sort by Impact Factor</option>
+                <option value="views">Sort by Views</option>
+            </select>
+        </div>
+        <!-- Publications will be loaded here -->
+    </main>
+
+    <!-- Right Sidebar -->
+    <aside class="publications-sidebar-right">
+        <div class="stats-section">
+            <h2>Publication Stats</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalPublications">0</div>
+                    <div class="stat-label">Total Publications</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalCitations">0</div>
+                    <div class="stat-label">Total Citations</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="avgImpactFactor">0.0</div>
+                    <div class="stat-label">Avg. Impact Factor</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalDownloads">0</div>
+                    <div class="stat-label">Total Downloads</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="top-journals-section">
+            <h2>Top Journals</h2>
+            <div id="topJournals">
+                <!-- Will be populated dynamically -->
+            </div>
+        </div>
+    </aside>
+</div>
+        <div class="publications-header">
+            <div class="header-content">
+                <h1>Research Publications</h1>
+                <p class="subtitle">Share and discover groundbreaking research</p>
+            </div>
+            <button class="btn btn-primary" id="addPublicationBtn">
+                <i class="fas fa-plus"></i> Add Publication
+            </button>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="publications-content">
+            <!-- Left Sidebar - Filters -->
+            <aside class="publications-sidebar">
+                <div class="filter-section">
+                    <h2>Filters</h2>
+                    
+                    <!-- Search -->
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="publicationSearch" 
+                               placeholder="Search publications...">
+                    </div>
+
+                    <!-- Year Range -->
+                    <div class="filter-group">
+                        <h3>Year Range</h3>
+                        <div class="year-range">
+                            <input type="number" id="yearFrom" min="1900" 
+                                   max="2025" placeholder="From">
+                            <span>-</span>
+                            <input type="number" id="yearTo" min="1900" 
+                                   max="2025" placeholder="To">
+                        </div>
+                    </div>
+
+                    <!-- Publication Types -->
+                    <div class="filter-group">
+                        <h3>Publication Type</h3>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="journal" checked>
+                                Journal Articles
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="conference" checked>
+                                Conference Papers
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="preprint" checked>
+                                Preprints
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="book" checked>
+                                Books & Chapters
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Research Fields -->
+                    <div class="filter-group">
+                        <h3>Research Fields</h3>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="computer-science" checked>
+                                Computer Science
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="physics" checked>
+                                Physics
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="biology" checked>
+                                Biology
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="chemistry" checked>
+                                Chemistry
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="mathematics" checked>
+                                Mathematics
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Sort Options -->
+                    <div class="filter-group">
+                        <h3>Sort By</h3>
+                        <select id="sortPublications" class="sort-select">
+                            <option value="date-desc">Newest First</option>
+                            <option value="date-asc">Oldest First</option>
+                            <option value="citations">Most Cited</option>
+                            <option value="title">Title (A-Z)</option>
+                        </select>
+                    </div>
+
+                    <!-- Clear Filters -->
+                    <button class="btn btn-secondary btn-block" id="clearFilters">
+                        Clear All Filters
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Main Publications List -->
+            <main class="publications-main">
+                <!-- View Options -->
+                <div class="view-options">
+                    <div class="view-toggles">
+                        <button class="view-btn active" data-view="grid">
+                            <i class="fas fa-th-large"></i>
+                        </button>
+                        <button class="view-btn" data-view="list">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+                    <div class="results-count">
+                        Showing <span id="publicationCount">0</span> publications
+                    </div>
+                </div>
+
+                <!-- Publications Grid -->
+                <div class="publications-grid" id="publicationsGrid">
+                    <!-- Publications will be loaded dynamically -->
+                    <div class="loading-spinner">Loading publications...</div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination" id="publicationsPagination">
+                    <!-- Pagination will be generated dynamically -->
+                </div>
+            </main>
+
+            <!-- Right Sidebar - Statistics & Insights -->
+            <aside class="publications-sidebar-right">
+                <!-- Publication Stats -->
+                <section class="stats-section">
+                    <h2>Statistics</h2>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value">1,245</div>
+                            <div class="stat-label">Total Publications</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">15.3k</div>
+                            <div class="stat-label">Citations</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">42</div>
+                            <div class="stat-label">h-index</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">89%</div>
+                            <div class="stat-label">Open Access</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Top Publications -->
+                <section class="top-publications">
+                    <h2>Most Cited</h2>
+                    <div class="top-publications-list" id="topPublications">
+                        <!-- Top publications will be loaded dynamically -->
+                    </div>
+                </section>
+
+                <!-- Publication Trends -->
+                <section class="publication-trends">
+                    <h2>Publication Trends</h2>
+                    <canvas id="publicationTrendsChart"></canvas>
+                </section>
+            </aside>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script>
+        // Authentication Check Script - Add at the beginning of each page's <script> section
+(function checkAuth() {
+    const session = localStorage.getItem('authSession');
+    if (!session) {
+        window.location.href = 'signin.html';
+        return;
+    }
+
+    const parsedSession = JSON.parse(session);
+    const lastActivity = new Date(parsedSession.lastActivityTime);
+    const now = new Date();
+    const diffMinutes = (now - lastActivity) / (1000 * 60);
+
+    if (diffMinutes > 30) {
+        localStorage.removeItem('authSession');
+        window.location.href = 'signin.html';
+    }
+})();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/publications.js"></script>
+    <script src="js/smooth-transitions.js"></script>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Research Projects - Research Collaboration Platform">
+    <title>Research Projects | Research Collaboration Platform</title>
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/projects.css">
+
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/header.css">
+    <script src="js/navbar.js" defer></script>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-container">
+            <!-- Logo/Brand -->
+            <div class="nav-brand">
+                <a href="index.html">
+                    <i class="fas fa-flask"></i>
+                    <span>Research Platform</span>
+                </a>
+            </div>
+    
+            <!-- Main Navigation -->
+            <ul class="nav-links">
+                <li><a href="projects.html"><i class="fas fa-project-diagram"></i> Projects</a></li>
+                <li><a href="publications.html"><i class="fas fa-book"></i> Publications</a></li>
+                <li><a href="collaboration.html"><i class="fas fa-users"></i> Collaboration</a></li>
+                <li><a href="resources.html"><i class="fas fa-cube"></i> Resources</a></li>
+            </ul>
+    
+            <!-- User Navigation -->
+            <div class="nav-user">
+                <!-- Search -->
+                <div class="nav-search">
+                    <input type="text" placeholder="Search...">
+                    <i class="fas fa-search"></i>
+                </div>
+    
+                <!-- User Info -->
+                <div class="user-info">
+                    <span class="user-time" id="navDateTime">2025-03-20 08:15:45</span>
+                    <div class="user-dropdown">
+                        <button class="user-button">
+                            <img src="assets/images/avatar.jpg" alt="TarunNagarajan" class="user-avatar">
+                            <span class="user-name">TarunNagarajan</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                            <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                            <a href="help.html"><i class="fas fa-question-circle"></i> Help</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Mobile Menu Button -->
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+
+    <!-- Main Content -->
+    <div class="projects-container">
+        <!-- Projects Header -->
+        <div class="projects-header">
+            <h1>Research Projects</h1>
+            <!-- Replace your existing "New Project" button with this -->
+<a href="new-project.html" class="btn btn-primary">
+    <i class="fas fa-plus"></i> New Project
+</a>
+        </div>
+
+        <!-- Search and Filters -->
+        <div class="projects-filters">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="projectSearch" placeholder="Search projects...">
+            </div>
+            
+            <div class="filter-group">
+                <select id="categoryFilter" class="filter-select">
+                    <option value="">All Categories</option>
+                    <option value="computer-science">Computer Science</option>
+                    <option value="physics">Physics</option>
+                    <option value="biology">Biology</option>
+                    <option value="chemistry">Chemistry</option>
+                    <option value="mathematics">Mathematics</option>
+                    <option value="other">Other</option>
+                </select>
+
+                <select id="statusFilter" class="filter-select">
+                    <option value="">All Statuses</option>
+                    <option value="active">Active</option>
+                    <option value="planning">Planning</option>
+                    <option value="completed">Completed</option>
+                    <option value="on-hold">On Hold</option>
+                </select>
+
+                <select id="sortBy" class="filter-select">
+                    <option value="recent">Most Recent</option>
+                    <option value="popular">Most Popular</option>
+                    <option value="collaboration">Most Collaborative</option>
+                    <option value="deadline">Upcoming Deadline</option>
+                </select>
+            </div>
+
+            <div class="view-toggle">
+                <button class="view-btn active" data-view="grid">
+                    <i class="fas fa-th-large"></i>
+                </button>
+                <button class="view-btn" data-view="list">
+                    <i class="fas fa-list"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Projects Grid -->
+        <div class="projects-grid" id="projectsGrid">
+            <div class="loading-spinner">Loading projects...</div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination" id="projectsPagination">
+            <button class="pagination-btn" data-page="prev" disabled>
+                <i class="fas fa-chevron-left"></i> Previous
+            </button>
+            <div class="pagination-numbers"></div>
+            <button class="pagination-btn" data-page="next">
+                Next <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script>
+        // Authentication Check Script - Add at the beginning of each page's <script> section
+(function checkAuth() {
+    const session = localStorage.getItem('authSession');
+    if (!session) {
+        window.location.href = 'signin.html';
+        return;
+    }
+
+    const parsedSession = JSON.parse(session);
+    const lastActivity = new Date(parsedSession.lastActivityTime);
+    const now = new Date();
+    const diffMinutes = (now - lastActivity) / (1000 * 60);
+
+    if (diffMinutes > 30) {
+        localStorage.removeItem('authSession');
+        window.location.href = 'signin.html';
+    }
+})();
+    </script>
+    <script src="js/main.js"></script>
+    <script src="js/projects.js"></script>
+    <script src="js/smooth-transitions.js"></script>
+
+</body>
+</html>

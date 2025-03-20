@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Project Details - Research Collaboration Platform">
+    <title>Quantum Computing Research Project | Research Collaboration Platform</title>
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/project-details.css">
+    <link rel="stylesheet" href="css/modal.css">
+
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/header.css">
+    <script src="js/navbar.js" defer></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header/Navigation -->
+    <header class="main-header">
+        <!-- Header content -->
+    </header>
+
+    <div class="project-details-container">
+        <!-- Project Header -->
+        <div class="project-header">
+            <div class="project-title-section">
+                <div class="project-title-content">
+                    <h1>Quantum Computing Research Project</h1>
+                    <div class="project-meta">
+                        <span><i class="fas fa-calendar"></i> Started: March 15, 2025</span>
+                        <span><i class="fas fa-users"></i> 8 Team Members</span>
+                        <span><i class="fas fa-clock"></i> Last Updated: 2 hours ago</span>
+                    </div>
+                    <span class="project-status status-active">Active</span>
+                </div>
+                <div class="project-actions">
+                    <button class="btn btn-primary" id="editProjectBtn">
+                        <i class="fas fa-edit"></i> Edit Project
+                    </button>
+                    <button class="btn btn-secondary" id="shareProjectBtn">
+                        <i class="fas fa-share-alt"></i> Share
+                    </button>
+                    <button class="btn btn-icon" id="projectMenuBtn">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project Content -->
+        <div class="project-content">
+            <!-- Main Content -->
+            <main class="project-main">
+                <!-- Description Section -->
+                <section class="project-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Project Overview</h2>
+                        <button class="btn btn-icon edit-btn" id="editDescriptionBtn">
+                            <i class="fas fa-pencil-alt"></i>
+                        </button>
+                    </div>
+                    <div class="project-description">
+                        <p>This research project focuses on developing novel quantum algorithms for optimization problems in machine learning. Our team is investigating the potential of quantum computing to accelerate complex computational tasks and improve the efficiency of existing algorithms.</p>
+                        
+                        <h3>Key Objectives:</h3>
+                        <ul>
+                            <li>Develop quantum algorithms for machine learning optimization</li>
+                            <li>Implement and test on quantum simulators</li>
+                            <li>Analyze performance improvements over classical methods</li>
+                            <li>Publish findings in top-tier journals</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Timeline Section -->
+                <section class="project-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Project Timeline</h2>
+                        <button class="btn btn-secondary" id="addMilestoneBtn">
+                            <i class="fas fa-plus"></i> Add Milestone
+                        </button>
+                    </div>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-date">March 15, 2025</div>
+                            <div class="timeline-content">
+                                <h3>Project Initiated</h3>
+                                <p>Team formation and initial planning completed</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">June 30, 2025</div>
+                            <div class="timeline-content">
+                                <h3>First Phase Completion</h3>
+                                <p>Algorithm development and initial testing</p>
+                            </div>
+                        </div>
+                        <!-- More timeline items -->
+                    </div>
+                </section>
+
+                <!-- Team Section -->
+                <section class="project-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Team Members</h2>
+                        <button class="btn btn-secondary" id="addTeamMemberBtn">
+                            <i class="fas fa-user-plus"></i> Add Member
+                        </button>
+                    </div>
+                    <div class="team-members">
+                        <div class="team-member">
+                            <img src="assets/images/avatar1.jpg" alt="TarunNagarajan" class="member-avatar">
+                            <div class="member-info">
+                                <div class="member-name">TarunNagarajan</div>
+                                <div class="member-role">Project Lead</div>
+                            </div>
+                        </div>
+                        <!-- More team members -->
+                    </div>
+                </section>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="project-sidebar">
+                <!-- Progress Section -->
+                <section class="sidebar-section progress-section">
+                    <h2>Overall Progress</h2>
+                    <div class="progress-circle">
+                        <canvas id="progressChart"></canvas>
+                        <div class="progress-info">65%</div>
+                    </div>
+                </section>
+
+                <!-- Stats Section -->
+                <section class="sidebar-section">
+                    <h2>Project Stats</h2>
+                    <div class="project-stats">
+                        <div class="stat-card">
+                            <div class="stat-value">24</div>
+                            <div class="stat-label">Tasks</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">12</div>
+                            <div class="stat-label">Files</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">156</div>
+                            <div class="stat-label">Comments</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">8</div>
+                            <div class="stat-label">Members</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Upcoming Deadlines -->
+                <section class="sidebar-section">
+                    <h2>Upcoming Deadlines</h2>
+                    <div class="deadlines-list">
+                        <!-- Deadlines will be loaded dynamically -->
+                    </div>
+                </section>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Edit Project Modal -->
+    <div class="modal" id="editProjectModal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h2>Edit Project</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="editProjectForm" class="modal-form">
+                <!-- Form fields will be populated dynamically -->
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/project-details.js"></script>
+    <div class="modal" id="createProjectModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create New Project</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form class="modal-form" id="createProjectForm">
+                <div class="form-group">
+                    <label for="projectTitle" class="form-label required">Project Title</label>
+                    <input type="text" id="projectTitle" name="title" class="form-input" 
+                           placeholder="Enter project title" required>
+                </div>
+    
+                <div class="form-group">
+                    <label for="projectSummary" class="form-label required">Brief Summary</label>
+                    <textarea id="projectSummary" name="summary" class="form-textarea" 
+                             placeholder="Brief overview of the project" required></textarea>
+                </div>
+    
+                <div class="form-group">
+                    <label for="projectDescription" class="form-label required">Detailed Description</label>
+                    <textarea id="projectDescription" name="description" class="form-textarea" 
+                             placeholder="Detailed description of the project" required></textarea>
+                </div>
+    
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="projectCategory" class="form-label required">Category</label>
+                        <select id="projectCategory" name="category" class="form-select" required>
+                            <option value="">Select Category</option>
+                            <option value="computer-science">Computer Science</option>
+                            <option value="physics">Physics</option>
+                            <option value="biology">Biology</option>
+                            <option value="chemistry">Chemistry</option>
+                            <option value="mathematics">Mathematics</option>
+                        </select>
+                    </div>
+    
+                    <div class="form-group">
+                        <label for="projectDuration" class="form-label required">Expected Duration</label>
+                        <select id="projectDuration" name="duration" class="form-select" required>
+                            <option value="">Select Duration</option>
+                            <option value="1-3">1-3 months</option>
+                            <option value="3-6">3-6 months</option>
+                            <option value="6-12">6-12 months</option>
+                            <option value="12+">Over 1 year</option>
+                        </select>
+                    </div>
+                </div>
+    
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="teamSize" class="form-label required">Team Size</label>
+                        <select id="teamSize" name="teamSize" class="form-select" required>
+                            <option value="">Select Team Size</option>
+                            <option value="1-2">1-2 members</option>
+                            <option value="3-5">3-5 members</option>
+                            <option value="6-10">6-10 members</option>
+                            <option value="10+">10+ members</option>
+                        </select>
+                    </div>
+    
+                    <div class="form-group">
+                        <label for="projectVisibility" class="form-label required">Visibility</label>
+                        <select id="projectVisibility" name="visibility" class="form-select" required>
+                            <option value="public">Public</option>
+                            <option value="private">Private</option>
+                            <option value="institution">Institution Only</option>
+                        </select>
+                    </div>
+                </div>
+    
+                <div class="form-group">
+                    <label for="requiredSkills" class="form-label">Required Skills</label>
+                    <input type="text" id="requiredSkills" name="skills" class="form-input"
+                           placeholder="Enter skills (comma-separated)">
+                </div>
+    
+                <div class="form-group">
+                    <label for="projectTags" class="form-label">Tags</label>
+                    <input type="text" id="projectTags" name="tags" class="form-input"
+                           placeholder="Enter tags (comma-separated)">
+                </div>
+    
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" data-action="cancel">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Project</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>// Authentication Check Script - Add at the beginning of each page's <script> section
+        (function checkAuth() {
+            const session = localStorage.getItem('authSession');
+            if (!session) {
+                window.location.href = 'signin.html';
+                return;
+            }
+        
+            const parsedSession = JSON.parse(session);
+            const lastActivity = new Date(parsedSession.lastActivityTime);
+            const now = new Date();
+            const diffMinutes = (now - lastActivity) / (1000 * 60);
+        
+            if (diffMinutes > 30) {
+                localStorage.removeItem('authSession');
+                window.location.href = 'signin.html';
+            }
+        })();</script>
+    <script src="js/smooth-transitions.js">
+    </script>
+</body>
+</html>

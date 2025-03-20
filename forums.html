@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Research Discussion Forums - Research Collaboration Platform">
+    <title>Research Forums | Research Collaboration Platform</title>
+    
+    <!-- CSS Files -->
+     <!-- Replace or update the header section of your forums page -->
+<!-- Replace your current forums-header with this -->
+<div class="forums-container">
+    <div class="forums-header">
+        <div class="header-content">
+            <div class="header-main">
+                <h1>Research Forums</h1>
+                <div class="header-meta">
+                    <div class="current-user">
+                        <div class="user-info">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="header-actions">
+            <a href="new-discussion.html" class="new-discussion-btn">
+                <i class="fas fa-plus"></i>
+                <span>Start New Discussion</span>
+                <div class="button-meta">
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/forums.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- SimpleMDE for Markdown editing -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+</head>
+<body>
+    <!-- Header/Navigation (same as other pages) -->
+    <nav class="main-nav">
+        <nav class="main-nav">
+            <div class="nav-container">
+                <!-- Logo/Brand -->
+                <div class="nav-brand">
+                    <a href="index.html">
+                        <i class="fas fa-flask"></i>
+                        <span>Research Platform</span>
+                    </a>
+                </div>
+        
+                <!-- Main Navigation -->
+                <ul class="nav-links">
+                    <li><a href="projects.html"><i class="fas fa-project-diagram"></i> Projects</a></li>
+                    <li><a href="publications.html"><i class="fas fa-book"></i> Publications</a></li>
+                    <li><a href="collaboration.html"><i class="fas fa-users"></i> Collaboration</a></li>
+                    <li><a href="resources.html"><i class="fas fa-cube"></i> Resources</a></li>
+                </ul>
+        
+                <!-- User Navigation -->
+                <div class="nav-user">
+                    <!-- Search -->
+                    <div class="nav-search">
+                        <input type="text" placeholder="Search...">
+                        <i class="fas fa-search"></i>
+                    </div>
+        
+                    <!-- User Info -->
+                    <div class="user-info">
+                        <span class="user-time" id="navDateTime">2025-03-20 08:15:45</span>
+                        <div class="user-dropdown">
+                            <button class="user-button">
+                                <img src="assets/images/avatar.jpg" alt="TarunNagarajan" class="user-avatar">
+                                <span class="user-name">TarunNagarajan</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="dropdown-menu">
+                                <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                                <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                                <a href="help.html"><i class="fas fa-question-circle"></i> Help</a>
+                                <div class="dropdown-divider"></div>
+                                <a href="#" class="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- Mobile Menu Button -->
+                <button class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </nav>
+    </nav>
+
+    <div class="forums-container">
+        <!-- Forums Header -->
+
+        <!-- Forums Navigation -->
+        <div class="forums-nav">
+            <!-- Categories and Search -->
+            <div class="forums-search">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="forumSearch" placeholder="Search discussions...">
+                </div>
+                <div class="forums-filters">
+                    <select id="categoryFilter" class="filter-select">
+                        <option value="">All Categories</option>
+                        <option value="computer-science">Computer Science</option>
+                        <option value="physics">Physics</option>
+                        <option value="biology">Biology</option>
+                        <option value="chemistry">Chemistry</option>
+                        <option value="mathematics">Mathematics</option>
+                        <option value="interdisciplinary">Interdisciplinary</option>
+                    </select>
+                    <select id="sortFilter" class="filter-select">
+                        <option value="recent">Most Recent</option>
+                        <option value="popular">Most Popular</option>
+                        <option value="unanswered">Unanswered</option>
+                        <option value="solved">Solved</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Tags Cloud -->
+            <div class="tags-cloud" id="tagsCloud">
+                <span class="tag active">All</span>
+                <span class="tag">Machine Learning</span>
+                <span class="tag">Quantum Computing</span>
+                <span class="tag">Data Science</span>
+                <span class="tag">Biotechnology</span>
+                <!-- More tags will be loaded dynamically -->
+            </div>
+        </div>
+
+        <!-- Main Forums Content -->
+        <div class="forums-content">
+            <!-- Left Sidebar - Categories -->
+            <aside class="forums-sidebar">
+                <nav class="categories-nav">
+                    <h2>Categories</h2>
+                    <ul>
+                        <li class="active">
+                            <a href="#all">
+                                <i class="fas fa-globe"></i>
+                                All Discussions
+                                <span class="count">2,451</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#computer-science">
+                                <i class="fas fa-laptop-code"></i>
+                                Computer Science
+                                <span class="count">842</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#physics">
+                                <i class="fas fa-atom"></i>
+                                Physics
+                                <span class="count">563</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#biology">
+                                <i class="fas fa-dna"></i>
+                                Biology
+                                <span class="count">421</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#chemistry">
+                                <i class="fas fa-flask"></i>
+                                Chemistry
+                                <span class="count">325</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#mathematics">
+                                <i class="fas fa-square-root-alt"></i>
+                                Mathematics
+                                <span class="count">298</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#interdisciplinary">
+                                <i class="fas fa-project-diagram"></i>
+                                Interdisciplinary
+                                <span class="count">187</span>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <h2>My Activity</h2>
+                    <ul>
+                        <li>
+                            <a href="#my-discussions">
+                                <i class="fas fa-comment-dots"></i>
+                                My Discussions
+                                <span class="count">12</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#my-replies">
+                                <i class="fas fa-reply"></i>
+                                My Replies
+                                <span class="count">48</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#bookmarked">
+                                <i class="fas fa-bookmark"></i>
+                                Bookmarked
+                                <span class="count">23</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- Main Discussion List -->
+            <!-- Replace your discussions-list section with this -->
+<main class="discussions-list">
+    <div class="discussions-header">
+        <h2>Latest Research Discussions</h2>
+        <div class="view-options">
+            <button class="view-btn active" data-view="detailed">
+                <i class="fas fa-th-list"></i>
+            </button>
+            <button class="view-btn" data-view="compact">
+                <i class="fas fa-list"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="discussions-container" id="discussionsList">
+        <!-- Discussion items will be loaded here -->
+    </div>
+
+    <!-- Infinite scroll loader -->
+    <div class="scroll-loader" id="scrollLoader">
+        <div class="loader-dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</main>
+
+            <!-- Right Sidebar - Popular & Featured -->
+            <aside class="forums-sidebar-right">
+                <!-- Featured Discussions -->
+                <section class="featured-discussions">
+                    <h2>Featured Discussions</h2>
+                    <div class="featured-list" id="featuredDiscussions">
+                        <!-- Featured discussions will be loaded dynamically -->
+                    </div>
+                </section>
+
+                <!-- Top Contributors -->
+                <section class="top-contributors">
+                    <h2>Top Contributors</h2>
+                    <div class="contributors-list" id="topContributors">
+                        <!-- Contributors will be loaded dynamically -->
+                    </div>
+                </section>
+
+                <!-- Popular Tags -->
+                <section class="popular-tags">
+                    <h2>Popular Tags</h2>
+                    <div class="tags-list" id="popularTags">
+                        <!-- Popular tags will be loaded dynamically -->
+                    </div>
+                </section>
+            </aside>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/forums.js"></script>
+</body>
+</html>

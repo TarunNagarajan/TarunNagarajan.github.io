@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Research Collaboration Platform - User Dashboard">
+    <title>Dashboard | Research Collaboration Platform</title>
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header/Navigation -->
+    <header class="main-header">
+        <nav class="nav-container">
+            <div class="logo">
+                <a href="index.html">ResearchCollab</a>
+            </div>
+            <div class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-links">
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="forums.html">Forums</a></li>
+                <li><a href="collaborate.html">Collaborate</a></li>
+                <li class="user-menu">
+                    <div class="user-avatar">
+                        <img src="assets/images/default-avatar.png" alt="TarunNagarajan" id="userAvatar">
+                    </div>
+                    <div class="dropdown-menu">
+                        <a href="profile.html">Profile</a>
+                        <a href="settings.html">Settings</a>
+                        <a href="#" id="logoutBtn">Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="dashboard-sidebar">
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active">
+                        <a href="#overview">
+                            <i class="fas fa-home"></i>
+                            Overview
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#my-projects">
+                            <i class="fas fa-project-diagram"></i>
+                            My Projects
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#discussions">
+                            <i class="fas fa-comments"></i>
+                            Discussions
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#notifications">
+                            <i class="fas fa-bell"></i>
+                            Notifications
+                            <span class="badge" id="notificationCount">3</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#messages">
+                            <i class="fas fa-envelope"></i>
+                            Messages
+                            <span class="badge" id="messageCount">2</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <!-- Welcome Section -->
+            <section class="welcome-section">
+                <h1>Welcome back, TarunNagarajan</h1>
+                <p class="last-login">Last login: 2025-03-20 02:45:00 UTC</p>
+            </section>
+
+            <!-- Quick Actions -->
+            <section class="quick-actions">
+                <h2>Quick Actions</h2>
+                <div class="actions-grid">
+                    <button class="action-btn" id="newProjectBtn">
+                        <i class="fas fa-plus"></i>
+                        New Project
+                    </button>
+                    <button class="action-btn" id="newDiscussionBtn">
+                        <i class="fas fa-comments"></i>
+                        Start Discussion
+                    </button>
+                    <button class="action-btn" id="findCollaboratorsBtn">
+                        <i class="fas fa-users"></i>
+                        Find Collaborators
+                    </button>
+                    <button class="action-btn" id="scheduleMeetingBtn">
+                        <i class="fas fa-calendar-plus"></i>
+                        Schedule Meeting
+                    </button>
+                </div>
+            </section>
+
+            <!-- Active Projects -->
+            <section class="active-projects">
+                <div class="section-header">
+                    <h2>Active Projects</h2>
+                    <a href="projects.html" class="view-all">View All</a>
+                </div>
+                <div class="projects-grid" id="activeProjects">
+                    <!-- Projects will be loaded dynamically -->
+                    <div class="loading-spinner">Loading projects...</div>
+                </div>
+            </section>
+
+            <!-- Recent Activity -->
+            <section class="recent-activity">
+                <div class="section-header">
+                    <h2>Recent Activity</h2>
+                    <div class="activity-filters">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="projects">Projects</button>
+                        <button class="filter-btn" data-filter="discussions">Discussions</button>
+                        <button class="filter-btn" data-filter="mentions">Mentions</button>
+                    </div>
+                </div>
+                <div class="activity-timeline" id="activityTimeline">
+                    <!-- Activities will be loaded dynamically -->
+                    <div class="loading-spinner">Loading activity...</div>
+                </div>
+            </section>
+
+            <!-- Suggested Collaborators -->
+            <section class="suggested-collaborators">
+                <h2>Suggested Collaborators</h2>
+                <div class="collaborators-grid" id="suggestedCollaborators">
+                    <!-- Collaborators will be loaded dynamically -->
+                    <div class="loading-spinner">Finding potential collaborators...</div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Right Sidebar -->
+        <aside class="dashboard-notifications">
+            <section class="notifications-panel">
+                <h3>Recent Notifications</h3>
+                <div class="notifications-list" id="notificationsList">
+                    <!-- Notifications will be loaded dynamically -->
+                </div>
+            </section>
+
+            <section class="upcoming-meetings">
+                <h3>Upcoming Meetings</h3>
+                <div class="meetings-list" id="upcomingMeetings">
+                    <!-- Meetings will be loaded dynamically -->
+                </div>
+            </section>
+        </aside>
+    </div>
+
+    <!-- Modal Templates -->
+    <div class="modal" id="newProjectModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create New Project</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="newProjectForm" class="modal-form">
+                <div class="form-group">
+                    <label for="projectTitle">Project Title</label>
+                    <input type="text" id="projectTitle" name="projectTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="projectDescription">Description</label>
+                    <textarea id="projectDescription" name="projectDescription" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="projectCategory">Category</label>
+                    <select id="projectCategory" name="projectCategory" required>
+                        <option value="">Select a category</option>
+                        <option value="computer-science">Computer Science</option>
+                        <option value="physics">Physics</option>
+                        <option value="biology">Biology</option>
+                        <option value="chemistry">Chemistry</option>
+                        <option value="mathematics">Mathematics</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" data-action="cancel">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Project</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="js/main.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>
