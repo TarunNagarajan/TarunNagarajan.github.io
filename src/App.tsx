@@ -8,7 +8,7 @@ const projects = [
   {
     id: 'compiler-opt',
     title: 'Hierarchical Multi-Agent RL for Compiler Optimization',
-    date: 'Ongoing / March 2026',
+    date: 'March 2026',
     summary: 'Autonomous discovery of optimal LLVM compiler pass sequences using a hierarchical multi-agent framework with Foveated GNNs and Two-Hot SymLog Binning.',
     github: 'https://github.com/TarunNagarajan/compiler-opt',
     content: () => (
