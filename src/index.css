@@ -73,13 +73,84 @@ h1, h2, h3, h4, h5, h6 {
   position: fixed;
   height: 100vh;
   box-sizing: border-box;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: var(--bg-color);
+  z-index: 1100;
+}
+
+.sidebar.collapsed {
+  transform: translateX(-100%);
 }
 
 .main-content {
-  margin-left: var(--sidebar-width);
-  padding: 4rem;
+  margin: 0 auto;
+  padding: 4rem 2rem;
   flex: 1;
   max-width: 800px;
+  animation: pageEnter 0.4s ease-out;
+  box-sizing: border-box;
+}
+
+/* Overriding the previous sidebar and content logic for independence */
+.sidebar {
+  width: var(--sidebar-width);
+  border-right: 1px solid var(--border-color);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  box-sizing: border-box;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: var(--bg-color);
+  z-index: 1100;
+}
+
+.sidebar.collapsed {
+  transform: translateX(-100%);
+}
+
+.sidebar-toggle {
+  position: fixed;
+  top: 1.5rem;
+  left: 1.5rem;
+  z-index: 1200;
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-color);
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* Ensure #root doesn't constrain the centering */
+#root {
+  display: block;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.sidebar-toggle:hover {
+  border-color: var(--accent-color);
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .nav-links {

@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { HashRouter as Router, Routes, Route, Link, useParams } from 'react-router-dom';
+import { InlineMath, BlockMath } from 'react-katex';
+import 'katex/dist/katex.min.css';
 import './App.css';
 
 const projects = [
@@ -7,66 +9,55 @@ const projects = [
     id: 'compiler-opt',
     title: 'Hierarchical Multi-Agent RL for Compiler Optimization',
     date: 'Ongoing / March 2026',
-    summary: 'Autonomous discovery of optimal LLVM compiler pass sequences using a hierarchical multi-agent framework.',
+    summary: 'Autonomous discovery of optimal LLVM compiler pass sequences using a hierarchical multi-agent framework with Foveated GNNs and Two-Hot SymLog Binning.',
     github: 'https://github.com/TarunNagarajan/compiler-opt',
     content: () => (
       <>
         <p>
-          Modern compilers like GCC and LLVM ship with hundreds of optimization passes, but selecting the right sequence remains a black art. The standard <code>-O2</code> and <code>-O3</code> flags apply a fixed, one-size-fits-all pipeline that often leaves performance on the table or worse, sometimes increases code size. 
+          The compilation phase-ordering problem—determining the optimal sequence of code-transforming optimization passes—is famously known to be NP-hard. Modern compilers like GCC and LLVM bypass this intractable search space by shipping with fixed, heuristic-driven pipelines (e.g., <code>-O2</code>, <code>-O3</code>). However, because these heuristics are static, they fail to account for the unique data-flow semantics, loop hierarchies, and memory access patterns of specific programs.
         </p>
         <p>
-          This project introduces a <strong>hierarchical multi-agent reinforcement learning</strong> architecture to autonomously discover optimal pass sequences by balancing competing objectives like execution speed, code size, and security.
+          This research treats compiler optimization as a continuous, non-stationary Markov Decision Process (MDP) and employs <strong>Hierarchical Multi-Agent Reinforcement Learning (HRL)</strong> to autonomously navigate the high-dimensional combinatorial space of LLVM pass interactions.
         </p>
         
-        <h2>The Foveated Perception Engine</h2>
+        <h2>Graph Topology and the Over-Smoothing Bottleneck</h2>
         <p>
-          To scale to industrial-size programs (e.g., 3.5MB+ LLVM modules) without losing fine-grained precision, I introduced a <strong>"Foveated" Graph Neural Network (GNN) architecture</strong>. Similar to human vision, the model maintains a high-resolution "Fovea" while condensing the "Periphery."
+          I model the LLVM Intermediate Representation (IR) as a unified property graph <InlineMath math="\mathcal{G} = (V, E)" /> containing the Control Flow Graph (CFG) and Data Dependence Graph (DDG). To resolve the tension between global context retrieval and local signal preservation, I engineered a <strong>Foveated Perception architecture</strong>.
         </p>
-        <ul>
-          <li><strong>The Fovea (Hotspots):</strong> Functions currently being optimized are extracted with 1:1 precision. Every instruction is a unique node in the GNN, preserving 100% of the relational data-flow.</li>
-          <li><strong>The Periphery (Context):</strong> The remainder of the program is condensed using Hierarchical Block Condensation (HBC). Multiple instructions are pooled into a single "Block-Node," providing global context at a fraction of the computational cost.</li>
-        </ul>
         <p>
-          This dual-fidelity approach achieves a <strong>3.05x speedup</strong> and an <strong>86% reduction in GNN nodes</strong> compared to flat architectures, enabling the model to "see" entire libraries while focusing high-precision resources on specific critical kernels.
+          The architecture imposes a dual-resolution topology on the IR graph using an adaptive <code>block_map</code> that dynamically adjusts the topological density. In the <strong>Fovea</strong>, the mapping is strictly isomorphic (<InlineMath math="1:1" />). In the <strong>Periphery</strong>, instructions undergo <strong>Hierarchical Block Condensation (HBC)</strong> via a deterministic scatter-reduction:
+        </p>
+        <div style={{ background: 'var(--bg-color)', padding: '1.5rem', borderRadius: '8px', border: '1px solid var(--border-color)', margin: '1.5rem 0' }}>
+          <BlockMath math="X'_{active} = \text{scatter\_mean}(X, B)" />
+          <p style={{ fontSize: '0.9rem', marginTop: '1rem', opacity: 0.8 }}>
+            where <InlineMath math="B \in \mathbb{N}^{|V|}" /> represents the dominance-frontier block assignment vector. This achieves an <strong>86% reduction in graph nodes</strong> while maintaining 100% relational depth in hotspots.
+          </p>
+        </div>
+
+        <h2>Fail-Safe Distributional Reasoning</h2>
+        <p>
+          To solve the gradient variance issues inherent in heterogeneous file scales (the "Linear Trap"), I implemented <strong>Categorical Distributional Reasoning</strong> using <strong>Two-Hot SymLog Binning</strong>. The continuous performance target <InlineMath math="y" /> is projected into a symmetric logarithmic space:
+        </p>
+        <BlockMath math="z = \text{sign}(y) \cdot \ln(1 + |y|)" />
+        <p>
+          The network predicts a categorical distribution <InlineMath math="\hat{P}" /> over 255 discrete bins spanning <InlineMath math="[-20\%, +20\%]" />. The "Two-Hot" encoding distributes the probability mass <InlineMath math="P" /> to the nearest bins <InlineMath math="b_i, b_{i+1}" />:
+        </p>
+        <BlockMath math="P_{b_i} = 1 - \text{dist}(z, b_i), \quad P_{b_{i+1}} = 1 - P_{b_i}" />
+        <p>
+          The system is optimized via Cross-Entropy:
+        </p>
+        <BlockMath math="\mathcal{L} = -\sum_{b \in \mathcal{B}} P_b \log(\hat{P}_b)" />
+        <p>
+          By strictly bounding the gradients within <InlineMath math="[-1, 1]" />, numerical explosions are rendered mathematically impossible.
         </p>
 
-        <h2>Multi-Objective Negotiation & Reward Hacking</h2>
+        <h2>Action-State Attention Mechanics</h2>
         <p>
-          Instead of treating all 200+ LLVM passes equally, the system classifies them into macro-level strategic decisions and micro-level tactical passes. Four specialist agents (Performance, Size, Security, Speed) operate at the strategic level, negotiating through an attention-based protocol to find Pareto-optimal tradeoffs.
+          I introduced a <strong>Multi-Head Cross-Attention</strong> module where the candidate optimization pass <InlineMath math="a" /> acts as a Query against the state vector <InlineMath math="s" />:
         </p>
+        <BlockMath math="\text{Attention}(Q_a, K_s, V_s) = \text{softmax}\left(\frac{Q_a K_s^T}{\sqrt{d_k}}\right)V_s" />
         <p>
-          A key finding of this research involved <strong>reward hacking</strong>. When agents were given a naive reward function (optimizing only for instruction count), they exploited loopholes, achieving lower actual optimization (17.0%). By implementing a "secure" agent with penalties for size bloat and pass repetition, the system achieved superior real-world optimization (19.7%) despite receiving lower absolute reward scores during training.
-        </p>
-      </>
-    )
-  },
-  {
-    id: 'early-exit',
-    title: 'Hierarchical Adaptive Transformer',
-    date: 'December 2025',
-    summary: 'Dynamic computation pathways for TinyLlama-1.1B, allowing tokens to skip unnecessary layers or FFNs based on complexity.',
-    github: 'https://github.com/TarunNagarajan/early-exit',
-    content: () => (
-      <>
-        <p>
-          Standard Transformer models utilize a fixed compute budget for every token, regardless of the token's complexity. This project implements a <strong>Hierarchical Adaptive Transformer</strong> framework that introduces dynamic computation pathways into pre-trained Large Language Models (specifically TinyLlama-1.1B).
-        </p>
-
-        <h2>Two-Dimensional Adaptive Strategy</h2>
-        <p>
-          The architecture wraps a frozen base model and introduces trainable control layers to enable a two-dimensional adaptive strategy for reducing inference latency:
-        </p>
-        <ul>
-          <li><strong>Vertical Adaptation (Depth):</strong> "Exit Gates" are inserted at specific depths (Layers 4, 8, 12, 16, 19). These lightweight MLPs act as binary classifiers. Tokens may terminate processing at these strategic intermediate layers if the model is sufficiently confident in its hidden state representation.</li>
-          <li><strong>Horizontal Adaptation (Width):</strong> For tokens that do not exit early, a "Router" determines whether the computationally expensive Feed-Forward Network (FFN) sub-layer is necessary. The system targets a specific capacity (e.g., 55%), meaning approximately 45% of FFN computations are dynamically skipped.</li>
-        </ul>
-
-        <h2>Training and Results</h2>
-        <p>
-          Training is conducted in two distinct phases (Router Training, then Exit Gate Training) to ensure stability and prevent collapse scenarios where models either exit immediately or never exit. The implementation is explicitly designed for stability in mixed-precision environments (FP16/FP32).
-        </p>
-        <p>
-          By leveraging the inherent sparsity of language modeling tasks, this approach successfully targets an inference speedup of <strong>1.5x–1.8x</strong> while maintaining minimal degradation in perplexity (under 12%).
+          This allows the model to selectively "attend" to relevant sub-graphs based on the action being queried—focusing on loop nests for unrolling passes or call graphs for inlining.
         </p>
       </>
     )
@@ -75,40 +66,83 @@ const projects = [
     id: 'task-quant',
     title: 'TaskQuant: Selective Quantization for LLMs',
     date: 'November 2025',
-    summary: 'Task-aware selective quantization strategy for Microsoft Phi-2 and Llama-3 that preserves structural "load-bearing" components.',
+    summary: 'Task-aware selective quantization strategy for Microsoft Phi-2 and Llama-3 that preserves structural "load-bearing" components using Fisher Information.',
     github: 'https://github.com/TarunNagarajan/TaskQuant',
     content: () => (
       <>
         <p>
-          Standard post-training quantization methods often degrade model performance on reasoning-heavy tasks by applying uniform compression policies. This project investigates <strong>Task-Aware Selective Quantization</strong> on Microsoft Phi-2 (2.7B) and Llama-3 (3B), leveraging Fisher Information metrics to identify and preserve the "structural load-bearing" components of the models.
+          Standard uniform Post-Training Quantization (PTQ) triggers catastrophic failure modes on reasoning-heavy tasks. This research formulates <strong>Task-Aware Selective Quantization</strong>, mathematically isolating the network sub-components indispensable for specific cognitive domains.
         </p>
 
-        <h2>Model Dynamics & Sensitivity Physics</h2>
+        <h2>Hessian Approximations via the Fisher Matrix</h2>
         <p>
-          The Fisher Information maps generated in this study reveal distinct "physics" for different architectures. These sensitivity scores correlate directly with the functional roles of specific layers and the cognitive demands of the tasks (like GSM8K).
+          To rigorously quantify parameter importance, I leverage the <strong>Fisher Information Matrix (FIM)</strong> as a first-order approximation of the Hessian of the loss landscape. For a parameter <InlineMath math="\theta" /> and task-specific distribution <InlineMath math="\mathcal{D}" />, the empirical Fisher Information <InlineMath math="F(\theta)" /> is:
         </p>
+        <BlockMath math="F(\theta) = \mathbb{E}_{x \sim \mathcal{D}} \left[ \left( \nabla_\theta \ln p(y|x, \theta) \right)^2 \right]" />
+        <p>
+          We normalize sensitivity across asymmetric network layers using the <strong>Fisher Information Density</strong> <InlineMath math="\rho_F" />:
+        </p>
+        <BlockMath math="\rho_F = \frac{1}{|P|} \sum_{\theta \in P} F(\theta)" />
         
-        <div style={{ margin: '2rem 0' }}>
-          <img src="/images/taskquant/phi_quantization.png" alt="Phi-2 Quantization Regions" style={{ maxWidth: '100%', height: 'auto', border: '1px solid var(--border-color)' }} />
-          <p style={{ fontSize: '0.8rem', color: 'var(--accent-color)', marginTop: '0.5rem' }}>Figure 1: Fisher Information sensitivity map for Phi-2 on GSM8K, highlighting the "Bottom-Heavy, Top-Heavy" structure.</p>
-        </div>
-
         <p>
-          <strong>Phi-2</strong> operates as a "bottom-heavy, top-heavy" system. It starts with unusually high sensitivity in the very first Value Projection (Layer 0), which acts as working memory to bind raw token integers. The most critical phase transition happens at Layer 29 (the "coherence gate"). If we quantize this layer, we sever the link between the prompt's instructions and the generation, leading to hallucinations.
+          In <strong>Phi-2 (2.7B)</strong>, this revealed extreme densities in the final <strong>Coherence Gate (Layer 29)</strong>. Despite being numerically small, these weights possess a Fisher density 14x higher than the model average.
         </p>
 
-        <div style={{ margin: '2rem 0' }}>
-          <img src="/images/taskquant/llama_quantization.png" alt="Llama-3 3B Quantization Regions" style={{ maxWidth: '100%', height: 'auto', border: '1px solid var(--border-color)' }} />
-          <p style={{ fontSize: '0.8rem', color: 'var(--accent-color)', marginTop: '0.5rem' }}>Figure 2: Fisher Information sensitivity map for Llama-3 3B, revealing the critical Layer 1 "Filter" anomaly.</p>
-        </div>
-
+        <h2>Phase Shifts and Feature Collapse</h2>
         <p>
-          <strong>Llama-3 3B</strong>, on the other hand, is a filter-dependent machine. Its most striking feature is a massive anomaly in Layer 1, which functions as a high-pass filter to clean up noise from the initial expansion. Relying on simple weight magnitude for quantization would destroy this early noise filter, rendering deep knowledge layers inaccessible due to upstream signal corruption.
+          Through qualitative analysis, I identified a failure mode termed <strong>Feature Collapse</strong>. Because Rotary Position Embeddings (RoPE) rely on precise trigonometric rotations:
+        </p>
+        <BlockMath math="\mathbf{q}'_m = \mathbf{R}_m \mathbf{q}_m, \quad \mathbf{k}'_n = \mathbf{R}_n \mathbf{k}_n" />
+        <p>
+          Quantizing the corresponding projection matrices <InlineMath math="W_q, W_k" /> introduces a phase shift <InlineMath math="\delta" />. This causes distinct tokens to algebraically "alias" or collapse into a single manifold point when:
+        </p>
+        <BlockMath math="\langle \mathbf{q}'_m, \mathbf{k}'_n \rangle \approx \langle \mathbf{q}_m, \mathbf{k}_n \rangle + \epsilon(\delta)" />
+        <p>
+          where <InlineMath math="\epsilon(\delta)" /> exceeds the attention threshold, resulting in variable aliasing (e.g., <InlineMath math="3 \times 60 = 180" /> vs <InlineMath math="3 \times 3 \times 60 = 540" />).
+        </p>
+      </>
+    )
+  },
+  {
+    id: 'early-exit',
+    title: 'Hierarchical Adaptive Transformer',
+    date: 'December 2025',
+    summary: 'Dynamic computation pathways for TinyLlama-1.1B, targeting 1.5x-1.8x inference speedups via vertical early exiting and horizontal FFN skipping.',
+    github: 'https://github.com/TarunNagarajan/early-exit',
+    content: () => (
+      <>
+        <p>
+          Standard Transformers utilize a fixed compute budget for every token. This project breaks that constraint by implementing a <strong>Hierarchical Adaptive Transformer</strong>, injecting token-level routing pathways directly into a pre-trained TinyLlama-1.1B.
         </p>
 
-        <h2>Feature Collapse</h2>
+        <h2>Two-Dimensional RoutingGrid</h2>
         <p>
-          An examination of the reasoning traces revealed a specific failure mode: <strong>Feature Collapse</strong>. In both models, Selective Quantization (prioritizing Fisher Information) often failed when handling repetitive variables (e.g., merging two distinct "3"s in a math problem into a single entity). This highlights a subtle limitation of Fisher-based selection: it optimizes for global loss reduction, inadvertently sacrificing the local redundancy needed for precise variable tracking in repetitive contexts.
+          The system introduces two auxiliary trainable control mechanisms:
+        </p>
+        <ul>
+          <li><strong>Vertical Early Exiting:</strong> Confidence gates <InlineMath math="g_d(h)" /> at strategic layers.</li>
+          <li><strong>Horizontal FFN Skipping:</strong> A router <InlineMath math="\sigma(h)" /> targeting a 55% average capacity.</li>
+        </ul>
+
+        <div style={{ background: 'var(--bg-color)', padding: '1.5rem', borderRadius: '8px', border: '1px solid var(--border-color)', margin: '1.5rem 0' }}>
+          <h3 style={{ fontSize: '0.9rem', textTransform: 'uppercase', marginBottom: '0.5rem', color: 'var(--accent-color)' }}>Reparameterization & Stability</h3>
+          <p style={{ fontSize: '0.95rem', marginBottom: '1rem' }}>
+            Differentiable routing is enabled via a <strong>Straight-Through Estimator</strong> with <strong>Gumbel-Softmax</strong> noise injection <InlineMath math="u \sim \text{Unif}(0, 1)" />:
+          </p>
+          <BlockMath math="z = \text{softmax}\left( \frac{\ln(\pi) + g}{\tau} \right), \quad g = -\ln(-\ln u)" />
+          <p style={{ fontSize: '0.95rem', marginTop: '1rem', marginBottom: '1rem' }}>
+            To prevent router activation explosions (NaNs), I integrated a <strong>Z-Loss</strong> penalty on logit magnitude:
+          </p>
+          <BlockMath math="\mathcal{L}_z = \alpha \cdot \frac{1}{N} \sum_{i=1}^N \left( \ln \sum_{j} e^{x_{ij}} \right)^2" />
+        </div>
+
+        <h2>Weighted Multi-Objective Optimization</h2>
+        <p>
+          Training is governed by a weighted loss function matching against the original unrouted model's distribution:
+        </p>
+        <BlockMath math="\mathcal{L}_{total} = \mathcal{L}_{CE} + \lambda_1 \mathcal{L}_{efficiency} + \lambda_2 \mathcal{L}_{z} + \lambda_3 \mathcal{L}_{entropy}" />
+        <p>
+          This achieves an inference speedup of <strong><InlineMath math="1.5\times - 1.8\times" /></strong> by learning to spend compute only where marginal utility is maximized.
         </p>
       </>
     )
@@ -117,43 +151,55 @@ const projects = [
     id: 'boolrl',
     title: 'boolrl: DRL for Boolean Simplification',
     date: 'August 2025',
-    summary: 'Investigating Deep Reinforcement Learning architectures (MLP, LSTM, GNN) for simplifying complex boolean expressions.',
+    summary: 'Investigating Deep Reinforcement Learning architectures (MLP, LSTM, GNN) for autonomous simplification of complex boolean expressions.',
     github: 'https://github.com/TarunNagarajan/boolrl',
     content: () => (
       <>
         <p>
-          This project explores the application of Deep Reinforcement Learning (DRL) to the classical computer science problem of simplifying boolean expressions. The goal is to train an agent that can autonomously apply logical simplification rules to reduce the complexity of a given boolean formula.
+          Boolean simplification is a core problem in circuit design. This project applies <strong>Deep Reinforcement Learning (DRL)</strong> to discover greedy simplification strategies by iteratively applying logical rewrite rules.
         </p>
 
-        <h2>Architectural Comparisons</h2>
+        <h2>Markov Decision Process Formulation</h2>
         <p>
-          The core focus of the research is comparing how different state representations affect the agent's ability to learn and apply greedy simplification strategies. Three distinct architectures were implemented and evaluated:
+          I framed the simplification process as an MDP where the reward <InlineMath math="R_t" /> is proportional to the literal reduction:
         </p>
-        <ul>
-          <li><strong>MLP-based Agent:</strong> A standard Deep Q-Network (DQN) using a feature vector (e.g., operator counts, expression depth) to represent the state. While basic, this agent achieved a baseline accuracy of around 63%.</li>
-          <li><strong>Sequence-based Agent (LSTM):</strong> This approach models the boolean expression as a sequence of tokens, allowing the Long Short-Term Memory network to capture some of the structural context of the formula.</li>
-          <li><strong>GNN-based Agent:</strong> The most advanced implementation uses a Graph Neural Network to represent the boolean expression directly as an Abstract Syntax Tree (AST). </li>
-        </ul>
-
-        <h2>Findings</h2>
+        <BlockMath math="R_t = \text{len}(S_t) - \text{len}(S_{t+1})" />
+        
+        <h2>Graph Attention Topology Learning</h2>
         <p>
-          The findings demonstrate that while flat feature vectors can yield moderate success, the <strong>GNN-based agent is significantly more powerful</strong>. By directly ingesting the graph structure of the AST, the GNN agent can learn the hierarchical and relational dependencies between logical operators, making it the most effective architecture for tackling the structural complexity inherent in boolean simplification.
+          While baselines treat formulas as sequences, the <strong>GNN-based agent</strong> represents the state as an <strong>Abstract Syntax Tree (AST)</strong>. Each node <InlineMath math="v" /> has an embedding <InlineMath math="x_v" /> updated via neighborhood <InlineMath math="\mathcal{N}(v)" /> attention:
+        </p>
+        <BlockMath math="\alpha_{vw} = \frac{\exp(\text{LeakyReLU}(\vec{a}^T [W x_v || W x_w]))}{\sum_{k \in \mathcal{N}(v)} \exp(\text{LeakyReLU}(\vec{a}^T [W x_v || W x_k]))}" />
+        <BlockMath math="x'_v = \sigma \left( \sum_{w \in \mathcal{N}(v)} \alpha_{vw} W x_w \right)" />
+        <p>
+          By utilizing 4 attention heads (<code>heads=4</code>), the agent natively learns structural patterns in the AST, achieving perfect structural awareness and significantly out-performing sequential models.
         </p>
       </>
     )
   }
 ];
 
-const Sidebar = ({ toggleTheme, isDark }: { toggleTheme: () => void, isDark: boolean }) => (
-  <aside className="sidebar">
-    <div className="logo">
-      <Link to="/" style={{ fontWeight: 700, fontSize: '1.2rem', border: 'none' }}>
-        tarun.
-      </Link>
+const Sidebar = ({ toggleTheme, isDark, isCollapsed, toggleCollapse }: { toggleTheme: () => void, isDark: boolean, isCollapsed: boolean, toggleCollapse: () => void }) => (
+  <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div className="logo">
+        <Link to="/" style={{ fontWeight: 700, fontSize: '1.2rem', border: 'none' }}>
+          tarun.
+        </Link>
+      </div>
+      <button 
+        onClick={toggleCollapse}
+        aria-label="Collapse Sidebar"
+        style={{ background: 'none', border: 'none', color: 'var(--accent-color)', cursor: 'pointer', padding: '4px' }}
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="11 17 6 12 11 7"></polyline>
+          <polyline points="18 17 13 12 18 7"></polyline>
+        </svg>
+      </button>
     </div>
     <nav className="nav-links">
-      <Link className="nav-link" to="/">Home</Link>
-      <Link className="nav-link" to="/research">Research</Link>
+      <Link className="nav-link" to="/">Research</Link>
       <Link className="nav-link" to="/about">About</Link>
     </nav>
     <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -196,35 +242,11 @@ const Sidebar = ({ toggleTheme, isDark }: { toggleTheme: () => void, isDark: boo
   </aside>
 );
 
-const Home = () => (
-  <div className="main-content">
-    <h1>Exploring efficient machine learning and systems optimization.</h1>
-    <p>
-      I am a researcher focused on Large Language Model optimization, reinforcement learning, 
-      and compiler design. This space documents my work in making models faster, 
-      smaller, and more intelligent through selective computation and architectural efficiency.
-    </p>
-    
-    <h2 style={{ marginTop: '4rem' }}>Featured Research</h2>
-    <div className="article-list">
-      {projects.slice(0, 2).map(project => (
-        <div key={project.id} className="article-item">
-          <span className="article-date">{project.date}</span>
-          <Link to={`/research/${project.id}`} className="article-title">
-            {project.title}
-          </Link>
-          <p className="article-preview">
-            {project.summary}
-          </p>
-        </div>
-      ))}
-    </div>
-  </div>
-);
-
 const ResearchList = () => (
   <div className="main-content">
-    <h1>Selected Research</h1>
+    <h2 style={{ fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '0.15em', color: 'var(--accent-color)', marginBottom: '2rem' }}>
+      Selected Research
+    </h2>
     <div className="article-list">
       {projects.map(project => (
         <div key={project.id} className="article-item">
@@ -249,34 +271,23 @@ const ResearchDetail = () => {
 
   return (
     <div className="main-content">
-      <Link to="/research" style={{ fontSize: '0.8rem', color: 'var(--accent-color)', marginBottom: '2rem', display: 'inline-block' }}>
+      <Link to="/" style={{ fontSize: '0.8rem', color: 'var(--accent-color)', marginBottom: '2rem', display: 'inline-block' }}>
         ← Back to Research
       </Link>
       <span className="article-date" style={{ display: 'block' }}>{project.date}</span>
-      <h1>{project.title}</h1>
-      <div style={{ marginBottom: '2rem' }}>
+      <h1 style={{ marginBottom: '0.5rem' }}>{project.title}</h1>
+      <div style={{ marginBottom: '2.5rem' }}>
         <a 
           href={project.github} 
           target="_blank" 
           rel="noopener noreferrer"
-          style={{ fontSize: '0.8rem', fontWeight: 500, color: 'var(--accent-color)' }}
+          style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--accent-color)', textDecoration: 'none', borderBottom: '1px solid var(--accent-color)' }}
         >
-          [ GITHUB ]
+          VIEW REPOSITORY ON GITHUB ↗
         </a>
       </div>
       <div className="article-body">
         <project.content />
-        
-        <div style={{ marginTop: '3rem' }}>
-          <a 
-            href={project.github} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            style={{ fontSize: '0.9rem', fontWeight: 700 }}
-          >
-            [ VIEW ON GITHUB ]
-          </a>
-        </div>
       </div>
     </div>
   );
@@ -285,22 +296,59 @@ const ResearchDetail = () => {
 const About = () => (
   <div className="main-content">
     <h1>About</h1>
-    <p>
-      I am an undergraduate researcher and a Computer Science student at NIT Warangal (Class of '28).
-    </p>
-    <p>
-      Currently, I am studying and investigating the intersections of systems programming and machine learning. 
-      My research focus includes developing adaptive computation pathways, exploring selective precision through 
-      quantization, and utilizing reinforcement learning for autonomous compiler optimization.
-    </p>
-    <h2 style={{ marginTop: '2rem' }}>Contact</h2>
-    <p>Email: <a href="mailto:tarun.greenville@gmail.com">tarun.greenville@gmail.com</a></p>
-    <p>GitHub: <a href="https://github.com/TarunNagarajan" target="_blank" rel="noopener noreferrer">@TarunNagarajan</a></p>
+    <div style={{ marginBottom: '3rem' }}>
+      <p style={{ lineHeight: '1.7', opacity: 0.9 }}>
+        I'm Tarun Nagarajan, an Undergraduate Student in Computer Science at <strong>NITW</strong>, Class of '28.
+      </p>
+      <p style={{ marginTop: '1.2rem', opacity: 0.9, lineHeight: '1.7' }}>
+        My interests lie at the intersection of systems programming and machine learning. I want to work in AI Inference Research down the line, and I am currently working in efficient inference algorithms, selective precision in large language models, and the application of reinforcement learning architectures to autonomous systems optimization.
+      </p>
+    </div>
+
+    <h2 style={{ fontSize: '1.1rem', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '1.5rem', color: 'var(--accent-color)' }}>
+      Contact & Links
+    </h2>
+    <div style={{ marginTop: '2rem' }}>
+      {[
+        { label: 'Personal', value: 'tarun.greenville@gmail.com', href: 'mailto:tarun.greenville@gmail.com' },
+        { label: 'College', value: 'tn24csb0a79@student.nitw.ac.in', href: 'mailto:tn24csb0a79@student.nitw.ac.in' },
+        { label: 'LinkedIn', value: 'linkedin.com/in/nagarajan-tarun', href: 'https://www.linkedin.com/in/nagarajan-tarun' },
+        { label: 'GitHub', value: 'github.com/TarunNagarajan', href: 'https://github.com/TarunNagarajan' }
+      ].map((item, i) => (
+        <div key={i} style={{ 
+          display: 'flex', 
+          alignItems: 'baseline', 
+          padding: '0.75rem 0', 
+          borderBottom: '1px solid var(--border-color)',
+          fontSize: '0.95rem'
+        }}>
+          <span style={{ 
+            width: '100px', 
+            fontSize: '0.7rem', 
+            textTransform: 'uppercase', 
+            letterSpacing: '0.05em', 
+            opacity: 0.5 
+          }}>
+            {item.label}
+          </span>
+          <a 
+            href={item.href} 
+            target={item.href.startsWith('http') ? "_blank" : undefined}
+            rel={item.href.startsWith('http') ? "noopener noreferrer" : undefined}
+            style={{ fontWeight: 500, border: 'none' }}
+          >
+            {item.value}
+          </a>
+        </div>
+      ))}
+    </div>
   </div>
 );
 
 function App() {
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(true);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [showTopBtn, setShowTopBtn] = useState(false);
 
   useEffect(() => {
     if (isDark) {
@@ -310,17 +358,83 @@ function App() {
     }
   }, [isDark]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 400) {
+        setShowTopBtn(true);
+      } else {
+        setShowTopBtn(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const toggleTheme = () => setIsDark(!isDark);
+  const toggleCollapse = () => setIsCollapsed(!isCollapsed);
+  const goToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
 
   return (
     <Router>
-      <Sidebar toggleTheme={toggleTheme} isDark={isDark} />
+      {isCollapsed && (
+        <button 
+          className="sidebar-toggle"
+          onClick={toggleCollapse}
+          aria-label="Toggle Sidebar"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      )}
+      <Sidebar toggleTheme={toggleTheme} isDark={isDark} isCollapsed={isCollapsed} toggleCollapse={toggleCollapse} />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/research" element={<ResearchList />} />
-        <Route path="/research/:id" element={<ResearchDetail />} />
+        <Route path="/" element={<ResearchList />} />
         <Route path="/about" element={<About />} />
+        <Route path="/research/:id" element={<ResearchDetail />} />
       </Routes>
+      
+      {showTopBtn && (
+        <button
+          onClick={goToTop}
+          aria-label="Back to Top"
+          style={{
+            position: 'fixed',
+            bottom: '2rem',
+            right: '2rem',
+            backgroundColor: 'var(--bg-color)',
+            border: '1px solid var(--border-color)',
+            borderRadius: '4px',
+            color: 'var(--text-color)',
+            cursor: 'pointer',
+            padding: '0.5rem 0.8rem',
+            fontSize: '0.7rem',
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em',
+            opacity: 0.8,
+            transition: 'all 0.2s ease',
+            zIndex: 1000,
+            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.opacity = '1';
+            e.currentTarget.style.borderColor = 'var(--accent-color)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.opacity = '0.8';
+            e.currentTarget.style.borderColor = 'var(--border-color)';
+          }}
+        >
+          ↑ Top
+        </button>
+      )}
     </Router>
   );
 }
