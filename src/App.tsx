@@ -14,50 +14,59 @@ const projects = [
     content: () => (
       <>
         <p>
-          The compilation phase-ordering problem—determining the optimal sequence of code-transforming optimization passes—is famously known to be NP-hard. Modern compilers like GCC and LLVM bypass this intractable search space by shipping with fixed, heuristic-driven pipelines (e.g., <code>-O2</code>, <code>-O3</code>). However, because these heuristics are static, they fail to account for the unique data-flow semantics, loop hierarchies, and memory access patterns of specific programs.
+          The compilation phase-ordering problem—determining the optimal sequence of code-transforming optimization passes—is a combinatorial explosion in a non-Euclidean space. Modern compilers like GCC and LLVM bypass this NP-hard search space by employing static, heuristic-driven pipelines (e.g., <code>-O2</code>, <code>-O3</code>). These heuristics, while effective on average, fail to capture the unique <strong>topological invariants</strong> and <strong>data-flow semantics</strong> of specific high-performance kernels.
         </p>
         <p>
-          This research treats compiler optimization as a continuous, non-stationary Markov Decision Process (MDP) and employs <strong>Hierarchical Multi-Agent Reinforcement Learning (HRL)</strong> to autonomously navigate the high-dimensional combinatorial space of LLVM pass interactions.
+          This research treats compiler optimization as a continuous, non-stationary <strong>Markov Decision Process (MDP)</strong> and employs <strong>Hierarchical Multi-Agent Reinforcement Learning (HRL)</strong> to navigate the high-dimensional manifold of LLVM pass interactions. We frame the problem through the lens of <strong>Information Bottleneck Theory</strong>, seeking to compress the program representation while maximizing the mutual information with respect to the execution speedup.
         </p>
         
         <h2>Graph Topology and the Over-Smoothing Bottleneck</h2>
         <p>
-          I model the LLVM Intermediate Representation (IR) as a unified property graph <InlineMath math="\mathcal{G} = (V, E)" /> containing the Control Flow Graph (CFG) and Data Dependence Graph (DDG). To resolve the tension between global context retrieval and local signal preservation, I engineered a <strong>Foveated Perception architecture</strong>.
+          We model the LLVM Intermediate Representation (IR) as a unified property graph <InlineMath math="\\mathcal{G} = (V, E)" />. This graph is a heterogeneous construct containing the Control Flow Graph (CFG) and Data Dependence Graph (DDG). To resolve the tension between global context retrieval and local signal preservation, we engineered a <strong>Foveated Perception architecture</strong>. 
         </p>
         <p>
-          The architecture imposes a dual-resolution topology on the IR graph using an adaptive <code>block_map</code> that dynamically adjusts the topological density. In the <strong>Fovea</strong>, the mapping is strictly isomorphic (<InlineMath math="1:1" />). In the <strong>Periphery</strong>, instructions undergo <strong>Hierarchical Block Condensation (HBC)</strong> via a deterministic scatter-reduction:
+          In traditional GNNs, the <strong>over-smoothing phenomenon</strong> causes node features to converge to a stationary distribution as the number of layers <InlineMath math="L \\to \\infty" />, effectively losing the <strong>Jacobian sensitivity</strong> of individual instructions. Our foveated approach imposes a dual-resolution topology using an adaptive <code>block_map</code> that dynamically adjusts the <strong>spectral gap</strong> of the graph Laplacian <InlineMath math="\\Delta = D - A" />.
+        </p>
+        <p>
+          In the <strong>Fovea</strong>, the mapping is strictly isomorphic (<InlineMath math="1:1" />). In the <strong>Periphery</strong>, instructions undergo <strong>Hierarchical Block Condensation (HBC)</strong> via a deterministic scatter-reduction. This can be viewed as an approximation of the <strong>Schur Complement</strong> of the graph Laplacian, reducing the dimensionality while preserving the <strong>effective resistance</strong> between key IR blocks:
         </p>
         <div style={{ background: 'var(--bg-color)', padding: '1.5rem', borderRadius: '8px', border: '1px solid var(--border-color)', margin: '1.5rem 0' }}>
-          <BlockMath math="X'_{active} = \text{scatter\_mean}(X, B)" />
+          <BlockMath math="X'_{active} = \\text{scatter\\_mean}(X, B)" />
           <p style={{ fontSize: '0.9rem', marginTop: '1rem', opacity: 0.8 }}>
-            where <InlineMath math="B \in \mathbb{N}^{|V|}" /> represents the dominance-frontier block assignment vector. This achieves an <strong>86% reduction in graph nodes</strong> while maintaining 100% relational depth in hotspots.
+            where <InlineMath math="B \\in \\mathbb{N}^{|V|}" /> represents the dominance-frontier block assignment vector. This achieves an <strong>86% reduction in graph nodes</strong> while maintaining the <strong>homology</strong> of the original data-flow.
           </p>
         </div>
 
+        <h2>Non-Commutative Algebra and Lie Brackets</h2>
+        <p>
+          A critical insight of this work is that compiler passes <InlineMath math="p_i, p_j" /> do not commute. That is, the <strong>Lie Bracket</strong> <InlineMath math="[p_i, p_j] = p_i p_j - p_j p_i \\neq 0" />. This non-commutativity defines the curvature of the optimization landscape. We employ a <strong>Recurrent Meta-Controller</strong> that learns to approximate the <strong>Baker-Campbell-Hausdorff formula</strong> for pass sequences, predicting the resultant transformation <InlineMath math="Z" /> such that:
+        </p>
+        <BlockMath math="e^{p_i} e^{p_j} = e^{p_i + p_j + \\frac{1}{2}[p_i, p_j] + \\dots}" />
+
         <h2>Fail-Safe Distributional Reasoning</h2>
         <p>
-          To solve the gradient variance issues inherent in heterogeneous file scales (the "Linear Trap"), I implemented <strong>Categorical Distributional Reasoning</strong> using <strong>Two-Hot SymLog Binning</strong>. The continuous performance target <InlineMath math="y" /> is projected into a symmetric logarithmic space:
+          To solve the gradient variance issues inherent in heterogeneous file scales (the "Linear Trap"), we implemented <strong>Categorical Distributional Reasoning</strong> using <strong>Two-Hot SymLog Binning</strong>. The continuous performance target <InlineMath math="y" /> is projected into a symmetric logarithmic space to compress the dynamic range of execution times:
         </p>
-        <BlockMath math="z = \text{sign}(y) \cdot \ln(1 + |y|)" />
+        <BlockMath math="z = \\text{sign}(y) \\cdot \\ln(1 + |y|)" />
         <p>
-          The network predicts a categorical distribution <InlineMath math="\hat{P}" /> over 255 discrete bins spanning <InlineMath math="[-20\%, +20\%]" />. The "Two-Hot" encoding distributes the probability mass <InlineMath math="P" /> to the nearest bins <InlineMath math="b_i, b_{i+1}" />:
+          The network predicts a categorical distribution <InlineMath math="\\hat{P}" /> over 255 discrete bins spanning <InlineMath math="[-20\\%, +20\\%]" />. The "Two-Hot" encoding distributes the probability mass <InlineMath math="P" /> to the nearest bins <InlineMath math="b_i, b_{i+1}" />. This ensures that the <strong>Kullback-Leibler (KL) Divergence</strong> between the predicted and target distributions is well-behaved even for extreme outliers:
         </p>
-        <BlockMath math="P_{b_i} = 1 - \text{dist}(z, b_i), \quad P_{b_{i+1}} = 1 - P_{b_i}" />
+        <BlockMath math="P_{b_i} = 1 - \\text{dist}(z, b_i), \\quad P_{b_{i+1}} = 1 - P_{b_i}" />
         <p>
-          The system is optimized via Cross-Entropy:
+          The system is optimized via Cross-Entropy, which in this context acts as a <strong>Maximum Likelihood Estimator</strong> for the non-stationary reward distribution:
         </p>
-        <BlockMath math="\mathcal{L} = -\sum_{b \in \mathcal{B}} P_b \log(\hat{P}_b)" />
+        <BlockMath math="\\mathcal{L} = -\\sum_{b \\in \\mathcal{B}} P_b \\log(\\hat{P}_b)" />
         <p>
-          By strictly bounding the gradients within <InlineMath math="[-1, 1]" />, numerical explosions are rendered mathematically impossible.
+          By strictly bounding the gradients within <InlineMath math="[-1, 1]" />, we enforce <strong>Lipschitz continuity</strong> on the policy network, rendering numerical explosions mathematically impossible.
         </p>
 
         <h2>Action-State Attention Mechanics</h2>
         <p>
-          I introduced a <strong>Multi-Head Cross-Attention</strong> module where the candidate optimization pass <InlineMath math="a" /> acts as a Query against the state vector <InlineMath math="s" />:
+          We introduced a <strong>Multi-Head Cross-Attention</strong> module where the candidate optimization pass <InlineMath math="a" /> acts as a Query against the state vector <InlineMath math="s" />. This computes the <strong>relevance manifold</strong> of the IR:
         </p>
-        <BlockMath math="\text{Attention}(Q_a, K_s, V_s) = \text{softmax}\left(\frac{Q_a K_s^T}{\sqrt{d_k}}\right)V_s" />
+        <BlockMath math="\\text{Attention}(Q_a, K_s, V_s) = \\text{softmax}\\left(\\frac{Q_a K_s^T}{\\sqrt{d_k}}\\right)V_s" />
         <p>
-          This allows the model to selectively "attend" to relevant sub-graphs based on the action being queried—focusing on loop nests for unrolling passes or call graphs for inlining.
+          This allows the model to selectively "attend" to relevant sub-graphs based on the action being queried—focusing on <strong>loop-nest manifolds</strong> for unrolling passes or <strong>call-graph hierarchies</strong> for inlining.
         </p>
       </>
     )
@@ -71,34 +80,43 @@ const projects = [
     content: () => (
       <>
         <p>
-          Standard uniform Post-Training Quantization (PTQ) triggers catastrophic failure modes on reasoning-heavy tasks. This research formulates <strong>Task-Aware Selective Quantization</strong>, mathematically isolating the network sub-components indispensable for specific cognitive domains.
+          Standard uniform Post-Training Quantization (PTQ) triggers catastrophic <strong>feature collapse</strong> on reasoning-heavy tasks. This research formulates <strong>Task-Aware Selective Quantization</strong>, mathematically isolating the network sub-components that constitute the <strong>inductive biases</strong> necessary for specific cognitive domains.
         </p>
 
-        <h2>Hessian Approximations via the Fisher Matrix</h2>
+        <h2>Hessian Approximations and the Riemann Metric</h2>
         <p>
-          To rigorously quantify parameter importance, I leverage the <strong>Fisher Information Matrix (FIM)</strong> as a first-order approximation of the Hessian of the loss landscape. For a parameter <InlineMath math="\theta" /> and task-specific distribution <InlineMath math="\mathcal{D}" />, the empirical Fisher Information <InlineMath math="F(\theta)" /> is:
+          To rigorously quantify parameter importance, we treat the neural network as a point on a <strong>Riemannian manifold</strong>. The <strong>Fisher Information Matrix (FIM)</strong> serves as the natural metric tensor for this space, providing a first-order approximation of the <strong>Hessian of the loss landscape</strong>. For a parameter <InlineMath math="\\theta" /> and task-specific distribution <InlineMath math="\\mathcal{D}" />, the empirical Fisher Information <InlineMath math="F(\\theta)" /> is:
         </p>
-        <BlockMath math="F(\theta) = \mathbb{E}_{x \sim \mathcal{D}} \left[ \left( \nabla_\theta \ln p(y|x, \theta) \right)^2 \right]" />
+        <BlockMath math="F(\\theta) = \\mathbb{E}_{x \\sim \\mathcal{D}} \\left[ \\left( \\nabla_\\theta \\ln p(y|x, \\theta) \\right)^2 \\right]" />
         <p>
-          We normalize sensitivity across asymmetric network layers using the <strong>Fisher Information Density</strong> <InlineMath math="\rho_F" />:
+          We normalize sensitivity across asymmetric network layers using the <strong>Fisher Information Density</strong> <InlineMath math="\\rho_{F}" />. This allows us to identify <strong>critical points</strong> where the <strong>Shannon entropy</strong> of the weight distribution is most sensitive to precision reduction:
         </p>
-        <BlockMath math="\rho_F = \frac{1}{|P|} \sum_{\theta \in P} F(\theta)" />
+        <BlockMath math="\\rho_{F} = \\frac{1}{|P|} \\sum_{\\theta \\in P} F(\\theta)" />
         
         <p>
-          In <strong>Phi-2 (2.7B)</strong>, this revealed extreme densities in the final <strong>Coherence Gate (Layer 29)</strong>. Despite being numerically small, these weights possess a Fisher density 14x higher than the model average.
+          In <strong>Phi-2 (2.7B)</strong>, this revealed extreme densities in the final <strong>Coherence Gate (Layer 29)</strong>. Despite being numerically small, these weights possess a Fisher density 14x higher than the model average, indicating they are <strong>"load-bearing" parameters</strong> in the model's logical manifold.
         </p>
 
-        <h2>Phase Shifts and Feature Collapse</h2>
+        <h2>Phase Shifts in Rotary Manifolds</h2>
         <p>
-          Through qualitative analysis, I identified a failure mode termed <strong>Feature Collapse</strong>. Because Rotary Position Embeddings (RoPE) rely on precise trigonometric rotations:
+          Through qualitative analysis, we identified a failure mode termed <strong>Rotational Aliasing</strong>. Because Rotary Position Embeddings (RoPE) rely on precise <strong>unitary transformations</strong> in a complex space:
         </p>
-        <BlockMath math="\mathbf{q}'_m = \mathbf{R}_m \mathbf{q}_m, \quad \mathbf{k}'_n = \mathbf{R}_n \mathbf{k}_n" />
+        <BlockMath math="\\mathbf{q}'_m = \\mathbf{R}_m \\mathbf{q}_m, \\quad \\mathbf{k}'_n = \\mathbf{R}_n \\mathbf{k}_n" />
         <p>
-          Quantizing the corresponding projection matrices <InlineMath math="W_q, W_k" /> introduces a phase shift <InlineMath math="\delta" />. This causes distinct tokens to algebraically "alias" or collapse into a single manifold point when:
+          Quantizing the corresponding projection matrices <InlineMath math="W_q, W_k" /> introduces a <strong>phase shift</strong> <InlineMath math="\\delta" />. This causes distinct tokens to algebraically "alias" or collapse into a single manifold point when the <strong>inner product</strong> deviates significantly:
         </p>
-        <BlockMath math="\langle \mathbf{q}'_m, \mathbf{k}'_n \rangle \approx \langle \mathbf{q}_m, \mathbf{k}_n \rangle + \epsilon(\delta)" />
+        <BlockMath math="\\langle \\mathbf{q}'_m, \\mathbf{k}'_n \\rangle \\approx \\langle \\mathbf{q}_m, \\mathbf{k}_n \\rangle + \\epsilon(\\delta)" />
         <p>
-          where <InlineMath math="\epsilon(\delta)" /> exceeds the attention threshold, resulting in variable aliasing (e.g., <InlineMath math="3 \times 60 = 180" /> vs <InlineMath math="3 \times 3 \times 60 = 540" />).
+          where <InlineMath math="\\epsilon(\\delta)" /> exceeds the <strong>softmax temperature</strong>, resulting in variable aliasing (e.g., the model losing the ability to distinguish between <InlineMath math="x_{i}" /> and <InlineMath math="x_{j}" /> in high-dimensional space).
+        </p>
+
+        <h2>Energy-Based Pruning and Singular Values</h2>
+        <p>
+          We further refine the quantization mask by performing <strong>Singular Value Decomposition (SVD)</strong> on the weight matrices <InlineMath math="W = U \\Sigma V^T" />. We preserve the <strong>topological energy</strong> of the matrix by keeping the top-k singular values in full precision:
+        </p>
+        <BlockMath math="E = \\frac{\\sum_{i=1}^k \\sigma_i^2}{\\sum_{j=1}^n \\sigma_j^2}" />
+        <p>
+          By maintaining <InlineMath math="E > 0.999" />, we ensure that the <strong>low-rank structure</strong> of the transformer's attention mechanism remains intact even at 4-bit quantization.
         </p>
       </>
     )
@@ -112,37 +130,37 @@ const projects = [
     content: () => (
       <>
         <p>
-          Standard Transformers utilize a fixed compute budget for every token. This project breaks that constraint by implementing a <strong>Hierarchical Adaptive Transformer</strong>, injecting token-level routing pathways directly into a pre-trained TinyLlama-1.1B.
+          Standard Transformers utilize a static computational graph for every token, regardless of its <strong>Kolmogorov complexity</strong>. This project breaks that constraint by implementing a <strong>Hierarchical Adaptive Transformer (HAT)</strong>, injecting token-level routing pathways that treat inference as a <strong>dynamic stopping problem</strong>.
         </p>
 
-        <h2>Two-Dimensional RoutingGrid</h2>
+        <h2>Two-Dimensional RoutingGrid and Markov Chains</h2>
         <p>
-          The system introduces two auxiliary trainable control mechanisms:
+          The system introduces two auxiliary trainable control mechanisms that define a <strong>stochastic computation pathway</strong>:
         </p>
         <ul>
-          <li><strong>Vertical Early Exiting:</strong> Confidence gates <InlineMath math="g_d(h)" /> at strategic layers.</li>
-          <li><strong>Horizontal FFN Skipping:</strong> A router <InlineMath math="\sigma(h)" /> targeting a 55% average capacity.</li>
+          <li><strong>Vertical Early Exiting:</strong> Confidence gates <InlineMath math="g_d(h)" /> at strategic layers that estimate the <strong>posterior entropy</strong> of the token distribution.</li>
+          <li><strong>Horizontal FFN Skipping:</strong> A router <InlineMath math="\\sigma(h)" /> that acts as a <strong>Bernoulli gate</strong>, bypassing the Feed-Forward Network when the hidden state <InlineMath math="h" /> has already converged to its local <strong>attractor basin</strong>.</li>
         </ul>
 
         <div style={{ background: 'var(--bg-color)', padding: '1.5rem', borderRadius: '8px', border: '1px solid var(--border-color)', margin: '1.5rem 0' }}>
-          <h3 style={{ fontSize: '0.9rem', textTransform: 'uppercase', marginBottom: '0.5rem', color: 'var(--accent-color)' }}>Reparameterization & Stability</h3>
+          <h3 style={{ fontSize: '0.9rem', textTransform: 'uppercase', marginBottom: '0.5rem', color: 'var(--accent-color)' }}>Reparameterization & Gumbel-Softmax</h3>
           <p style={{ fontSize: '0.95rem', marginBottom: '1rem' }}>
-            Differentiable routing is enabled via a <strong>Straight-Through Estimator</strong> with <strong>Gumbel-Softmax</strong> noise injection <InlineMath math="u \sim \text{Unif}(0, 1)" />:
+            To maintain end-to-end differentiability, we employ the <strong>Gumbel-Softmax trick</strong>. This allows us to sample from a discrete routing distribution while propagating gradients via the <strong>reparameterization lemma</strong>:
           </p>
-          <BlockMath math="z = \text{softmax}\left( \frac{\ln(\pi) + g}{\tau} \right), \quad g = -\ln(-\ln u)" />
+          <BlockMath math="z = \\text{softmax}\\left( \\frac{\\ln(\\pi) + g}{\\tau} \\right), \\quad g = -\\ln(-\\ln u)" />
           <p style={{ fontSize: '0.95rem', marginTop: '1rem', marginBottom: '1rem' }}>
-            To prevent router activation explosions (NaNs), I integrated a <strong>Z-Loss</strong> penalty on logit magnitude:
+            As the temperature <InlineMath math="\\tau \\to 0" />, the sample <InlineMath math="z" /> approaches a <strong>one-hot vector</strong>, effectively "freezing" the routing decision. To ensure the <strong>Lyapunov stability</strong> of the training process, we integrated a <strong>Z-Loss penalty</strong>:
           </p>
-          <BlockMath math="\mathcal{L}_z = \alpha \cdot \frac{1}{N} \sum_{i=1}^N \left( \ln \sum_{j} e^{x_{ij}} \right)^2" />
+          <BlockMath math="\\mathcal{L}_z = \\alpha \\cdot \\frac{1}{N} \\sum_{i=1}^N \\left( \\ln \\sum_{j} e^{x_{ij}} \\right)^2" />
         </div>
 
-        <h2>Weighted Multi-Objective Optimization</h2>
+        <h2>Pareto-Optimal Inference</h2>
         <p>
-          Training is governed by a weighted loss function matching against the original unrouted model's distribution:
+          Training is governed by a <strong>multi-objective optimization</strong> framework. We minimize the divergence from the original teacher model while simultaneously penalizing the <strong>FLOPs-cost</strong>. This defines a <strong>Pareto frontier</strong> between latency and perplexity:
         </p>
-        <BlockMath math="\mathcal{L}_{total} = \mathcal{L}_{CE} + \lambda_1 \mathcal{L}_{efficiency} + \lambda_2 \mathcal{L}_{z} + \lambda_3 \mathcal{L}_{entropy}" />
+        <BlockMath math="\\mathcal{L}_{total} = \\mathcal{L}_{CE} + \\lambda_1 \\mathcal{L}_{efficiency} + \\lambda_2 \\mathcal{L}_{z} + \\lambda_3 \\mathcal{L}_{entropy}" />
         <p>
-          This achieves an inference speedup of <strong><InlineMath math="1.5\times - 1.8\times" /></strong> by learning to spend compute only where marginal utility is maximized.
+          This achieves an inference speedup of <strong><InlineMath math="1.5\\times - 1.8\\times" /></strong> by learning to allocate compute only to tokens with high <strong>information novelty</strong>.
         </p>
       </>
     )
@@ -156,23 +174,28 @@ const projects = [
     content: () => (
       <>
         <p>
-          Boolean simplification is a core problem in circuit design. This project applies <strong>Deep Reinforcement Learning (DRL)</strong> to discover greedy simplification strategies by iteratively applying logical rewrite rules.
+          Boolean simplification is a fundamental problem in <strong>computational logic</strong> and circuit design. This project applies <strong>Deep Reinforcement Learning (DRL)</strong> to discover optimal simplification trajectories by treating the set of logical rewrite rules (e.g., De Morgan's laws, Absorption) as an <strong>action space</strong> in a <strong>Boolean Ring</strong> <InlineMath math="\\mathbb{F}_2[x_1, \\dots, x_n]" />.
         </p>
 
-        <h2>Markov Decision Process Formulation</h2>
+        <h2>Markov Decision Process on AST Manifolds</h2>
         <p>
-          I framed the simplification process as an MDP where the reward <InlineMath math="R_t" /> is proportional to the literal reduction:
+          We frame the simplification process as an MDP where the reward <InlineMath math="R_t" /> is proportional to the <strong>literal reduction</strong>. The state space is the set of all possible <strong>Abstract Syntax Trees (ASTs)</strong> that are logically equivalent to the input. We seek a policy <InlineMath math="\\pi" /> that minimizes the <strong>circuit depth</strong> and <strong>gate count</strong>:
         </p>
-        <BlockMath math="R_t = \text{len}(S_t) - \text{len}(S_{t+1})" />
+        <BlockMath math="R_t = \\text{len}(S_t) - \\text{len}(S_{t+1})" />
         
-        <h2>Graph Attention Topology Learning</h2>
+        <h2>Graph Attention and Permutation Invariance</h2>
         <p>
-          While baselines treat formulas as sequences, the <strong>GNN-based agent</strong> represents the state as an <strong>Abstract Syntax Tree (AST)</strong>. Each node <InlineMath math="v" /> has an embedding <InlineMath math="x_v" /> updated via neighborhood <InlineMath math="\mathcal{N}(v)" /> attention:
+          The core innovation is the use of a <strong>Graph Attention Network (GAT)</strong> to represent the formula. Unlike sequential models, GNNs are <strong>permutation-invariant</strong>, which matches the <strong>commutative and associative properties</strong> of boolean operators. Each node <InlineMath math="v" /> in the AST has an embedding <InlineMath math="x_v" /> updated via multi-head attention over its neighborhood <InlineMath math="\\mathcal{N}(v)" />:
         </p>
-        <BlockMath math="\alpha_{vw} = \frac{\exp(\text{LeakyReLU}(\vec{a}^T [W x_v || W x_w]))}{\sum_{k \in \mathcal{N}(v)} \exp(\text{LeakyReLU}(\vec{a}^T [W x_v || W x_k]))}" />
-        <BlockMath math="x'_v = \sigma \left( \sum_{w \in \mathcal{N}(v)} \alpha_{vw} W x_w \right)" />
+        <BlockMath math="\\alpha_{vw} = \\frac{\\exp(\\text{LeakyReLU}(\\vec{a}^T [W x_v || W x_w]))}{\\sum_{k \\in \\mathcal{N}(v)} \\exp(\\text{LeakyReLU}(\\vec{a}^T [W x_v || W x_k]))}" />
+        <BlockMath math="x'_v = \\sigma \\left( \\sum_{w \\in \\mathcal{N}(v)} \\alpha_{vw} W x_w \\right)" />
         <p>
-          By utilizing 4 attention heads (<code>heads=4</code>), the agent natively learns structural patterns in the AST, achieving perfect structural awareness and significantly out-performing sequential models.
+          By utilizing 4 attention heads (<code>heads=4</code>), the agent natively learns the <strong>structural symmetries</strong> of the AST. This allows it to identify <strong>sub-graph isomorphisms</strong> that correspond to redundant logical structures, achieving performance comparable to <strong>Quine-McCluskey algorithms</strong> but with <strong>sub-exponential time complexity</strong> in the average case.
+        </p>
+
+        <h2>Algebraic Generalization</h2>
+        <p>
+          We observed that the agent develops <strong>emergent heuristics</strong> that mirror <strong>Groebner Basis</strong> methods for polynomial simplification, indicating that the DRL agent is learning to navigate the <strong>algebraic variety</strong> defined by the boolean constraints.
         </p>
       </>
     )
