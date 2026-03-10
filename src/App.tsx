@@ -321,7 +321,7 @@ const About = () => (
     <h1>About</h1>
     <div style={{ marginBottom: '3rem' }}>
       <p style={{ lineHeight: '1.7', opacity: 0.9 }}>
-        I'm Tarun Nagarajan, an Undergraduate Student in Computer Science at <strong>NITW</strong>, Class of '28.
+        I'm Tarun Nagarajan, an Undergraduate Student in Computer Science at NITW, Class of '28.
       </p>
       <p style={{ marginTop: '1.2rem', opacity: 0.9, lineHeight: '1.7' }}>
         My interests lie at the intersection of systems programming and machine learning. I want to work in AI Inference Research down the line, and I am currently working in efficient inference algorithms, selective precision in large language models, and the application of reinforcement learning architectures to autonomous systems optimization.
